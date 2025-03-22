@@ -1,5 +1,5 @@
 const supertest = require('supertest');
-const createApp = require('./app');
+const createApp = require('../src/app');
 
 const database = {};
 const app = createApp(database);

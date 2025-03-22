@@ -1,0 +1,42 @@
+generator client {
+    provider = "prisma-client-js"
+}
+
+datasource db {
+    provider = "postgresql"
+    url      = env("DATABASE_URL")
+}
+
+model Photo {
+    id          Int           @id @default(autoincrement())
+    path        String
+    title       String
+    Leaderboard Leaderboard[]
+    Character   Character[]
+}
+
+model Leaderboard {
+    id      Int     @id @default(autoincrement())
+    photoId Int
+    photo   Photo   @relation(fields: [photoId], references: [id])
+    Entry   Entry[]
+}
+
+model Entry {
+    id            Int         @id @default(autoincrement())
+    leaderboardId Int
+    leaderboard   Leaderboard @relation(fields: [leaderboardId], references: [id])
+    name          String
+    score         Int
+}
+
+model Character {
+    id      Int    @id @default(autoincrement())
+    photoId Int
+    x1      Int
+    y1      Int
+    x2      Int
+    y2      Int
+    photo   Photo  @relation(fields: [photoId], references: [id])
+    name    String
+}
