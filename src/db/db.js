@@ -4,4 +4,8 @@ async function getPhotos() {
   return await prisma.photo.findMany();
 }
 
-module.exports = { getPhotos };
+async function getOnePhoto(id) {
+  return await prisma.photo.findUnique({ where: { id } });
+}
+
+module.exports = { getPhotos, getOnePhoto };
