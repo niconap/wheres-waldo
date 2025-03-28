@@ -1,4 +1,9 @@
-const { getPhotos, getOnePhoto } = require('../src/db/db.js');
+const {
+  getPhotos,
+  getOnePhoto,
+  getLeaderBoard,
+  createEntry,
+} = require('../src/db/db.js');
 const { prismaMock } = require('./singleton.js');
 
 describe('getPhotos', () => {
@@ -70,6 +75,79 @@ describe('getOnePhoto', () => {
     expect(prismaMock.photo.findUnique).toHaveBeenCalledTimes(1);
     expect(prismaMock.photo.findUnique).toHaveBeenCalledWith({
       where: { id: 999 },
+    });
+  });
+});
+
+describe('getLeaderBoard', () => {
+  test('correctly returns leaderboard with entries based on photo id', async () => {
+    const mockLeaderboard = {
+      id: 1,
+      photoId: 1,
+      Entry: [
+        { id: 1, user: 'Alice', score: 100, leaderboardId: 1 },
+        { id: 2, user: 'Bob', score: 80, leaderboardId: 1 },
+      ],
+    };
+
+    prismaMock.leaderboard.findUnique.mockResolvedValue(mockLeaderboard);
+
+    const leaderboard = await getLeaderBoard(1);
+
+    expect(leaderboard).toEqual(mockLeaderboard);
+    expect(prismaMock.leaderboard.findUnique).toHaveBeenCalledTimes(1);
+    expect(prismaMock.leaderboard.findUnique).toHaveBeenCalledWith({
+      where: { photoId: 1 },
+      include: { Entry: true },
+    });
+  });
+
+  test('should return null when no leaderboard exists for the photo id', async () => {
+    prismaMock.leaderboard.findUnique.mockResolvedValue(null);
+
+    const leaderboard = await getLeaderBoard(999);
+
+    expect(leaderboard).toBeNull();
+    expect(prismaMock.leaderboard.findUnique).toHaveBeenCalledTimes(1);
+    expect(prismaMock.leaderboard.findUnique).toHaveBeenCalledWith({
+      where: { photoId: 999 },
+      include: { Entry: true },
+    });
+  });
+});
+
+describe('createEntry', () => {
+  test('correctly creates multiple entries with leaderboardId, user, and score fields', async () => {
+    const mockEntries = [
+      { id: 1, name: 'Alice', score: 100, leaderboardId: 1 },
+      { id: 2, name: 'Bob', score: 80, leaderboardId: 1 },
+      { id: 3, name: 'Charlie', score: 90, leaderboardId: 1 },
+    ];
+
+    mockEntries.forEach((entry) => {
+      prismaMock.entry.create.mockResolvedValueOnce(entry);
+    });
+
+    const entryDataArray = [
+      [1, 'Alice', 100],
+      [1, 'Bob', 80],
+      [1, 'Charlie', 90],
+    ];
+
+    const createdEntries = [];
+    for (const [leaderboardId, name, score] of entryDataArray) {
+      const entry = await createEntry(leaderboardId, name, score);
+      createdEntries.push(entry);
+    }
+
+    expect(createdEntries).toEqual(mockEntries);
+    expect(prismaMock.entry.create).toHaveBeenCalledTimes(
+      entryDataArray.length
+    );
+    entryDataArray.forEach(([leaderboardId, name, score], index) => {
+      expect(prismaMock.entry.create).toHaveBeenNthCalledWith(index + 1, {
+        data: { leaderboardId, name, score },
+      });
     });
   });
 });
