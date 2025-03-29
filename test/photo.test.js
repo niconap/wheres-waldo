@@ -1,14 +1,9 @@
 const supertest = require('supertest');
 const createApp = require('../src/app');
-const { getOnePhoto } = require('../src/db/db');
 
 const mockDatabase = {
   getPhotos: jest.fn(),
   getOnePhoto: jest.fn(),
-  getLeaderBoard: jest.fn(),
-  createEntry: jest.fn(),
-  getEntries: jest.fn(),
-  getCharacter: jest.fn(),
 };
 
 const app = createApp(mockDatabase);
@@ -17,24 +12,12 @@ beforeEach(() => {
   jest.clearAllMocks();
 });
 
-describe('GET /', () => {
-  describe('Gets a nice message', () => {
-    // Should respond with status code 200
-    test('Should respond with status code 200', async () => {
-      const response = await supertest(app).get('/');
-      expect(response.statusCode).toBe(200);
-    });
-  });
-});
-
 describe('GET /photo', () => {
-  // Should respond with a status of 200
   test('Responds with status code 200', async () => {
     const response = await supertest(app).get('/photo');
     expect(response.statusCode).toBe(200);
   });
 
-  // Should send back an array of photos
   test('Responds with an array of photos', async () => {
     const mockPhotos = [
       {
@@ -116,5 +99,13 @@ describe('GET /photo/:id', () => {
     expect(response2.body).toEqual(mockPhotos[1]);
 
     expect(mockDatabase.getOnePhoto).toHaveBeenCalledTimes(2);
+  });
+
+  test('returns a 403 status when using an incorrect ID format', async () => {
+    const response = await supertest(app).get('/photo/abc');
+    expect(response.statusCode).toBe(403);
+    expect(response.body.error).toEqual('Invalid ID format provided');
+    expect(mockDatabase.getOnePhoto).toHaveBeenCalledTimes(0);
+    expect(mockDatabase.getPhotos).toHaveBeenCalledTimes(0);
   });
 });
