@@ -1,5 +1,6 @@
 const express = require('express');
 const createPhotoRouter = require('./routers/photo.js');
+const createLeaderboardRouter = require('./routers/leaderboard.js');
 
 function createApp(database) {
   const app = express();
@@ -7,10 +8,7 @@ function createApp(database) {
   app.use(express.json());
 
   app.use('/photo', createPhotoRouter(database));
-
-  app.get('/', (req, res) => {
-    res.sendStatus(200);
-  });
+  app.use('/leaderboard', createLeaderboardRouter(database));
 
   return app;
 }

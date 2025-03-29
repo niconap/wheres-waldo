@@ -1,0 +1,71 @@
+const supertest = require('supertest');
+const createApp = require('../src/app');
+
+const mockDatabase = {
+  getLeaderBoard: jest.fn(),
+  createEntry: jest.fn(),
+  getEntries: jest.fn(),
+  getCharacter: jest.fn(),
+};
+
+const app = createApp(mockDatabase);
+
+beforeEach(() => {
+  jest.clearAllMocks();
+});
+
+describe('GET /leaderboard/:id', () => {
+  test('returns status code 404 when a leaderboard is not found', async () => {
+    mockDatabase.getLeaderBoard.mockResolvedValue(null);
+
+    const response = await supertest(app).get('/leaderboard/1');
+
+    expect(response.statusCode).toBe(404);
+    expect(mockDatabase.getLeaderBoard).toHaveBeenCalledWith('1');
+    expect(mockDatabase.getLeaderBoard).toHaveBeenCalledTimes(1);
+  });
+
+  test('returns a leaderboard with status code 200', async () => {
+    const mockLeaderboard = {
+      id: 1,
+      photoId: 1,
+      Entry: [],
+    };
+
+    mockDatabase.getLeaderBoard.mockResolvedValue(mockLeaderboard);
+
+    const response = await supertest(app).get('/leaderboard/1');
+
+    expect(response.body).toEqual(mockLeaderboard);
+    expect(response.statusCode).toBe(200);
+    expect(mockDatabase.getLeaderBoard).toHaveBeenCalledWith('1');
+    expect(mockDatabase.getLeaderBoard).toHaveBeenCalledTimes(1);
+  });
+
+  test('returns a leaderboard with entries', async () => {
+    const mockLeaderboardWithEntries = {
+      id: 1,
+      photoId: 1,
+      Entry: [
+        { userId: 1, score: 100 },
+        { userId: 2, score: 90 },
+      ],
+    };
+
+    mockDatabase.getLeaderBoard.mockResolvedValue(mockLeaderboardWithEntries);
+
+    const response = await supertest(app).get('/leaderboard/1');
+
+    expect(response.body).toEqual(mockLeaderboardWithEntries);
+    expect(response.statusCode).toBe(200);
+    expect(mockDatabase.getLeaderBoard).toHaveBeenCalledWith('1');
+    expect(mockDatabase.getLeaderBoard).toHaveBeenCalledTimes(1);
+  });
+
+  test('returns a 403 status when using an incorrect ID format', async () => {
+    const response = await supertest(app).get('/leaderboard/abc');
+    expect(response.statusCode).toBe(403);
+    expect(response.body.error).toEqual('Invalid ID format provided');
+    expect(mockDatabase.getLeaderBoard).toHaveBeenCalledTimes(0);
+  });
+});

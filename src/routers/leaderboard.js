@@ -1,12 +1,7 @@
 const express = require('express');
 
-function createPhotoRouter(database) {
+function createLeaderboardRouter(database) {
   const router = express.Router();
-
-  router.get('/', async (_, res) => {
-    const photos = await database.getPhotos();
-    res.send(photos);
-  });
 
   router.get('/:id', async (req, res) => {
     if (isNaN(req.params.id) && isNaN(parseInt(req.params.id))) {
@@ -14,10 +9,10 @@ function createPhotoRouter(database) {
       return;
     }
 
-    const photo = await database.getOnePhoto(req.params.id);
+    const leaderboard = await database.getLeaderBoard(req.params.id);
 
-    if (photo) {
-      res.send(photo);
+    if (leaderboard) {
+      res.send(leaderboard);
     } else {
       res.sendStatus(404);
     }
@@ -26,4 +21,4 @@ function createPhotoRouter(database) {
   return router;
 }
 
-module.exports = createPhotoRouter;
+module.exports = createLeaderboardRouter;
