@@ -1,6 +1,7 @@
-const createApp = require('./app.js');
+const createApp = require('app');
+const database = require('db/db.js');
 
-const app = createApp({});
+const app = createApp(database);
 const port = 8080;
 
 app.listen(port, () => {
