@@ -3,6 +3,8 @@ const {
   getOnePhoto,
   getLeaderBoard,
   createEntry,
+  getEntries,
+  getCharacter,
 } = require('../src/db/db.js');
 const { prismaMock } = require('./singleton.js');
 
@@ -148,6 +150,71 @@ describe('createEntry', () => {
       expect(prismaMock.entry.create).toHaveBeenNthCalledWith(index + 1, {
         data: { leaderboardId, name, score },
       });
+    });
+  });
+});
+
+describe('getEntries', () => {
+  test('should return all entries for a given leaderboard ID', async () => {
+    const mockEntries = [
+      { id: 1, user: 'Alice', score: 100, leaderboardId: 1 },
+      { id: 2, user: 'Bob', score: 80, leaderboardId: 1 },
+      { id: 3, user: 'Charlie', score: 90, leaderboardId: 1 },
+    ];
+
+    prismaMock.entry.findMany.mockResolvedValue(mockEntries);
+
+    const entries = await getEntries(1);
+
+    expect(entries).toEqual(mockEntries);
+    expect(prismaMock.entry.findMany).toHaveBeenCalledTimes(1);
+    expect(prismaMock.entry.findMany).toHaveBeenCalledWith({
+      where: { leaderboardId: 1 },
+    });
+  });
+
+  test('should return an empty array when no entries exist for the given leaderboard ID', async () => {
+    const mockEntries = [];
+
+    prismaMock.entry.findMany.mockResolvedValue(mockEntries);
+
+    const entries = await getEntries(999);
+
+    expect(entries).toEqual(mockEntries);
+    expect(prismaMock.entry.findMany).toHaveBeenCalledTimes(1);
+    expect(prismaMock.entry.findMany).toHaveBeenCalledWith({
+      where: { leaderboardId: 999 },
+    });
+  });
+});
+
+describe('getCharacter', () => {
+  test('should return a character with the correct id', async () => {
+    const mockCharacter = {
+      id: 1,
+      name: 'Waldo',
+    };
+
+    prismaMock.character.findUnique.mockResolvedValue(mockCharacter);
+
+    const character = await getCharacter(1);
+
+    expect(character).toEqual(mockCharacter);
+    expect(prismaMock.character.findUnique).toHaveBeenCalledTimes(1);
+    expect(prismaMock.character.findUnique).toHaveBeenCalledWith({
+      where: { id: 1 },
+    });
+  });
+
+  test('should return null when no character matches the id', async () => {
+    prismaMock.character.findUnique.mockResolvedValue(null);
+
+    const character = await getCharacter(999);
+
+    expect(character).toBeNull();
+    expect(prismaMock.character.findUnique).toHaveBeenCalledTimes(1);
+    expect(prismaMock.character.findUnique).toHaveBeenCalledWith({
+      where: { id: 999 },
     });
   });
 });

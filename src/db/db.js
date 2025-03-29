@@ -10,7 +10,7 @@ async function getPhotos() {
 
 /**
  * Get a photo with the corresponding id
- * @param {number} id
+ * @param {number} id - The ID of the photo
  * @returns {Object} an object containing the photo's data
  */
 async function getOnePhoto(id) {
@@ -19,7 +19,7 @@ async function getOnePhoto(id) {
 
 /**
  * Get a leaderboard with the corresponding photo id
- * @param {number} photoId
+ * @param {number} photoId - The ID of the photo
  * @returns {Object} an object containing the leaderboard data, including its
  * entries
  */
@@ -49,4 +49,29 @@ async function createEntry(leaderboardId, name, score) {
   });
 }
 
-module.exports = { getPhotos, getOnePhoto, getLeaderBoard, createEntry };
+/**
+ * Get the entries from a leaderboard
+ * @param {number} leaderboardId - The ID of the leaderboard
+ * @returns {Array} The array of entries
+ */
+async function getEntries(leaderboardId) {
+  return await prisma.entry.findMany({ where: { leaderboardId } });
+}
+
+/**
+ * Get a character's information
+ * @param {number} id - The ID of the character
+ * @returns {Object} The character's information
+ */
+async function getCharacter(id) {
+  return await prisma.character.findUnique({ where: { id } });
+}
+
+module.exports = {
+  getPhotos,
+  getOnePhoto,
+  getLeaderBoard,
+  createEntry,
+  getEntries,
+  getCharacter
+};
