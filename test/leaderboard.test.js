@@ -38,6 +38,7 @@ describe('GET /leaderboard/:id', () => {
 
     expect(response.body).toEqual(mockLeaderboard);
     expect(response.statusCode).toBe(200);
+    expect(response.headers['content-type']).toMatch(/json/);
     expect(mockDatabase.getLeaderBoard).toHaveBeenCalledWith('1');
     expect(mockDatabase.getLeaderBoard).toHaveBeenCalledTimes(1);
   });
@@ -58,6 +59,7 @@ describe('GET /leaderboard/:id', () => {
 
     expect(response.body).toEqual(mockLeaderboardWithEntries);
     expect(response.statusCode).toBe(200);
+    expect(response.headers['content-type']).toMatch(/json/);
     expect(mockDatabase.getLeaderBoard).toHaveBeenCalledWith('1');
     expect(mockDatabase.getLeaderBoard).toHaveBeenCalledTimes(1);
   });
@@ -67,5 +69,40 @@ describe('GET /leaderboard/:id', () => {
     expect(response.statusCode).toBe(403);
     expect(response.body.error).toEqual('Invalid ID format provided');
     expect(mockDatabase.getLeaderBoard).toHaveBeenCalledTimes(0);
+  });
+});
+
+describe('GET /store', () => {
+  test('returns status code 200 when a valid name is sent', async () => {
+    const response = await supertest(app)
+      .post('/leaderboard/entry')
+      .send({ name: 'Nico' });
+    expect(response.statusCode).toBe(200);
+  });
+
+  test('creates an entry for the leaderboard with the right data', async () => {
+    const mockEntry = {
+      id: 1,
+      leaderboardId: 1,
+      name: 'Nico',
+      score: 1000,
+    };
+
+    mockDatabase.createEntry.mockResolvedValue(mockEntry);
+
+    const response = await supertest(app)
+      .post('/leaderboard/entry')
+      .send({ name: 'Nico' });
+
+    expect(response.statusCode).toBe(200);
+    expect(response.headers['content-type']).toMatch(/json/);
+    expect(response.body).toEqual({ score: 1000 });
+    expect(mockDatabase.createEntry).toHaveBeenCalledWith(1, 'Nico', 1000);
+    expect(mockDatabase.createEntry).toHaveBeenCalledTimes(1);
+  });
+
+  test('returns status code 403 when no name is sent', async () => {
+    const response = await supertest(app).post('/leaderboard/entry');
+    expect(response.statusCode).toBe(403);
   });
 });

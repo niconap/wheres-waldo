@@ -39,6 +39,7 @@ describe('GET /photo', () => {
     mockDatabase.getPhotos.mockResolvedValue(mockPhotos);
 
     const response = await supertest(app).get('/photo');
+    expect(response.headers['content-type']).toMatch(/json/);
     expect(response.body).toEqual(mockPhotos);
     expect(Array.isArray(response.body)).toBe(true);
     expect(mockDatabase.getPhotos).toHaveBeenCalledTimes(1);
@@ -50,6 +51,7 @@ describe('GET /photo', () => {
     mockDatabase.getPhotos.mockResolvedValue(mockPhotos);
 
     const response = await supertest(app).get('/photo');
+    expect(response.headers['content-type']).toMatch(/json/);
     expect(response.body).toEqual(mockPhotos);
     expect(Array.isArray(response.body)).toBe(true);
     expect(mockDatabase.getPhotos).toHaveBeenCalledTimes(1);
@@ -89,11 +91,13 @@ describe('GET /photo/:id', () => {
     mockDatabase.getOnePhoto.mockReturnValueOnce(mockPhotos[1]);
 
     const response = await supertest(app).get('/photo/1');
+    expect(response.headers['content-type']).toMatch(/json/);
     expect(mockDatabase.getOnePhoto).toHaveBeenCalledWith('1');
     expect(response.status).toBe(200);
     expect(response.body).toEqual(mockPhotos[0]);
 
     const response2 = await supertest(app).get('/photo/2');
+    expect(response.headers['content-type']).toMatch(/json/);
     expect(mockDatabase.getOnePhoto).toHaveBeenCalledWith('2');
     expect(response2.status).toBe(200);
     expect(response2.body).toEqual(mockPhotos[1]);
