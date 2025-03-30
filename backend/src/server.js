@@ -1,5 +1,5 @@
-const createApp = require('app');
-const database = require('db/db.js');
+const createApp = require('./app.js');
+const database = require('./db/db.js');
 
 const app = createApp(database);
 const port = 8080;

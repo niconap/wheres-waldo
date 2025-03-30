@@ -2,7 +2,7 @@ require('dotenv').config();
 const express = require('express');
 const session = require('express-session');
 const { PrismaSessionStore } = require('@quixo3/prisma-session-store');
-const { prisma } = require('./db/client');
+const { prisma } = require('./db/client.js');
 
 const createPhotoRouter = require('./routers/photo.js');
 const createLeaderboardRouter = require('./routers/leaderboard.js');
