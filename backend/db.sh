@@ -19,9 +19,15 @@ done
 echo "Database is ready!"
 
 echo "Setting up .env file..."
-cat <<EOT > .env
-DATABASE_URL="postgresql://$DB_USER:$DB_PASSWORD@localhost:$DB_PORT/$DB_NAME"
-EOT
+
+if grep -q "^DATABASE_URL=" .env; then
+  echo "Replacing existing DATABASE_URL in .env file..."
+  sed -i "s|^DATABASE_URL=.*|DATABASE_URL=\"postgresql://$DB_USER:$DB_PASSWORD@localhost:$DB_PORT/$DB_NAME\"|" .env
+else
+  echo "Adding DATABASE_URL to .env file..."
+  echo "" >> .env
+  echo "DATABASE_URL=\"postgresql://$DB_USER:$DB_PASSWORD@localhost:$DB_PORT/$DB_NAME\"" >> .env
+fi
 
 echo "Running Prisma migrations..."
 npx prisma migrate dev --name init
