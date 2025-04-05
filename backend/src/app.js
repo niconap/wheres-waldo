@@ -6,6 +6,7 @@ const { prisma } = require('./db/client.js');
 
 const createPhotoRouter = require('./routers/photo.js');
 const createLeaderboardRouter = require('./routers/leaderboard.js');
+const createGameRouter = require('./routers/game.js');
 
 function createApp(database) {
   const app = express();
@@ -27,6 +28,7 @@ function createApp(database) {
     })
   );
 
+  app.use('/game', createGameRouter(database));
   app.use('/photo', createPhotoRouter(database));
   app.use('/leaderboard', createLeaderboardRouter(database));
 
