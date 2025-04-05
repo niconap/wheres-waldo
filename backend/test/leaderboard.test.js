@@ -72,7 +72,7 @@ describe('GET /leaderboard/:id', () => {
   });
 });
 
-describe('GET /store', () => {
+describe('POST /leaderboard/entry', () => {
   test('returns status code 200 when a valid name is sent', async () => {
     const response = await supertest(app)
       .post('/leaderboard/entry')

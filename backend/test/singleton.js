@@ -22,7 +22,7 @@ jest.mock('@quixo3/prisma-session-store', () => {
 
 jest.mock('express-session', () => {
   return jest.fn(() => (req, _, next) => {
-    req.session = { start: 1000, leaderboardId: 1 };
+    req.session = { start: 1000, leaderboardId: 1, score: 1000 };
     next();
   });
 });
