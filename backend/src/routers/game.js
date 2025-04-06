@@ -59,6 +59,12 @@ function createGameRouter(database) {
       }
     }
 
+    if (req.session.status.notFound.length === 0) {
+      req.session.score = Date.now() - req.session.start;
+      res.send({ status: req.session.status, score: req.session.score });
+      return;
+    }
+
     res.send({ status: req.session.status });
   });
 

@@ -20,16 +20,22 @@ jest.mock('@quixo3/prisma-session-store', () => {
   };
 });
 
+let mockSession = {};
+
 jest.mock('express-session', () => {
   return jest.fn(() => (req, _, next) => {
-    req.session = {
-      start: 1000,
-      leaderboardId: 1,
-      score: 1000,
-      status: { found: [], notFound: [1, 2] },
-    };
+    req.session = mockSession;
     next();
   });
+});
+
+beforeEach(() => {
+  mockSession = {
+    start: 1000,
+    leaderboardId: 1,
+    score: 1000,
+    status: { found: [], notFound: [1, 2] },
+  };
 });
 
 jest.spyOn(Date, 'now').mockImplementation(() => 2000);

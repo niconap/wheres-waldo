@@ -136,4 +136,55 @@ describe('POST /game/guess/:photoId', () => {
       notFound: [1, 2],
     });
   });
+
+  test('completes the game when all characters are found', async () => {
+    mockDatabase.getCharacter
+      .mockResolvedValueOnce({
+        id: 1,
+        name: 'Waldo',
+        x1: 90,
+        y1: 190,
+        x2: 110,
+        y2: 210,
+      })
+      .mockResolvedValueOnce({
+        id: 2,
+        name: 'Odlaw',
+        x1: 50,
+        y1: 50,
+        x2: 70,
+        y2: 70,
+      })
+      .mockResolvedValueOnce({
+        id: 1,
+        name: 'Waldo',
+        x1: 90,
+        y1: 190,
+        x2: 110,
+        y2: 210,
+      })
+      .mockResolvedValueOnce({
+        id: 2,
+        name: 'Odlaw',
+        x1: 50,
+        y1: 50,
+        x2: 70,
+        y2: 70,
+      });
+
+    await supertest(app)
+      .post('/game/guess/1')
+      .send({ name: 'Waldo', x: 100, y: 200 });
+
+    const response = await supertest(app)
+      .post('/game/guess/1')
+      .send({ name: 'Odlaw', x: 60, y: 60 });
+
+    expect(response.statusCode).toBe(200);
+    expect(response.body.status).toEqual({
+      found: [1, 2],
+      notFound: [],
+    });
+    expect(response.body.score).toEqual(Date.now() - 1000);
+  });
 });
