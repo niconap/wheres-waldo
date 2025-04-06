@@ -1,4 +1,5 @@
 import { render, screen } from '@testing-library/react';
+import '@testing-library/jest-dom';
 import Nav from '../src/Nav.tsx';
 
 describe('Navigation Bar', () => {
