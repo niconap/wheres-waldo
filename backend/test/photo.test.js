@@ -3,7 +3,7 @@ const createApp = require('../src/app');
 
 const mockDatabase = {
   getPhotos: jest.fn(),
-  getOnePhoto: jest.fn(),
+  getPhoto: jest.fn(),
 };
 
 const app = createApp(mockDatabase);
@@ -66,7 +66,7 @@ describe('GET /photo/:id', () => {
       expect(response.statusCode).toBe(404);
       id++;
     }
-    expect(mockDatabase.getOnePhoto).toHaveBeenCalledTimes(id);
+    expect(mockDatabase.getPhoto).toHaveBeenCalledTimes(id);
   });
 
   test('Sends one photo with a correct ID', async () => {
@@ -87,29 +87,29 @@ describe('GET /photo/:id', () => {
       },
     ];
 
-    mockDatabase.getOnePhoto.mockReturnValueOnce(mockPhotos[0]);
-    mockDatabase.getOnePhoto.mockReturnValueOnce(mockPhotos[1]);
+    mockDatabase.getPhoto.mockReturnValueOnce(mockPhotos[0]);
+    mockDatabase.getPhoto.mockReturnValueOnce(mockPhotos[1]);
 
     const response = await supertest(app).get('/photo/1');
     expect(response.headers['content-type']).toMatch(/json/);
-    expect(mockDatabase.getOnePhoto).toHaveBeenCalledWith('1');
+    expect(mockDatabase.getPhoto).toHaveBeenCalledWith('1');
     expect(response.status).toBe(200);
     expect(response.body).toEqual(mockPhotos[0]);
 
     const response2 = await supertest(app).get('/photo/2');
     expect(response.headers['content-type']).toMatch(/json/);
-    expect(mockDatabase.getOnePhoto).toHaveBeenCalledWith('2');
+    expect(mockDatabase.getPhoto).toHaveBeenCalledWith('2');
     expect(response2.status).toBe(200);
     expect(response2.body).toEqual(mockPhotos[1]);
 
-    expect(mockDatabase.getOnePhoto).toHaveBeenCalledTimes(2);
+    expect(mockDatabase.getPhoto).toHaveBeenCalledTimes(2);
   });
 
   test('returns a 403 status when using an incorrect ID format', async () => {
     const response = await supertest(app).get('/photo/abc');
     expect(response.statusCode).toBe(403);
     expect(response.body.error).toEqual('Invalid ID format provided');
-    expect(mockDatabase.getOnePhoto).toHaveBeenCalledTimes(0);
+    expect(mockDatabase.getPhoto).toHaveBeenCalledTimes(0);
     expect(mockDatabase.getPhotos).toHaveBeenCalledTimes(0);
   });
 });

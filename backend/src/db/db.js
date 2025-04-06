@@ -13,8 +13,13 @@ async function getPhotos() {
  * @param {number} id - The ID of the photo
  * @returns {Object} an object containing the photo's data
  */
-async function getOnePhoto(id) {
-  return await prisma.photo.findUnique({ where: { id } });
+async function getPhoto(id) {
+  return await prisma.photo.findUnique({
+    where: { id },
+    include: {
+      Character: true,
+    },
+  });
 }
 
 /**
@@ -69,9 +74,9 @@ async function getCharacter(id) {
 
 module.exports = {
   getPhotos,
-  getOnePhoto,
+  getPhoto,
   getLeaderBoard,
   createEntry,
   getEntries,
-  getCharacter
+  getCharacter,
 };

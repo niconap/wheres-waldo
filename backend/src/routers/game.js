@@ -9,19 +9,57 @@ function createGameRouter(database) {
       return;
     }
 
+    const photo = await database.getPhoto(req.params.photoId);
     const leaderboard = await database.getLeaderBoard(req.params.photoId);
 
-    if (!leaderboard) {
+    if (!photo || !leaderboard) {
       res.sendStatus(404);
       return;
     }
 
     req.session.start = Date.now();
     req.session.leaderboardId = leaderboard.id;
+    req.session.status = {
+      found: [],
+      notFound: photo.Character.map((character) => character.id),
+    };
     res.json({
       start: req.session.start,
       leaderboardId: req.session.leaderboardId,
+      status: req.session.status,
     });
+  });
+
+  router.post('/guess/:photoId', async (req, res) => {
+    if (isNaN(req.params.photoId) && isNaN(parseInt(req.params.photoId))) {
+      res.status(403).send({ error: 'Invalid ID format provided' });
+      return;
+    }
+
+    const photo = await database.getPhoto(req.params.id);
+
+    if (!photo) {
+      res.sendStatus(404);
+      return;
+    }
+
+    for (const element of photo.Character) {
+      const character = await database.getCharacter(element.id);
+      if (
+        character.name === req.body.name &&
+        req.body.x >= character.x1 &&
+        req.body.x <= character.x2 &&
+        req.body.y >= character.y1 &&
+        req.body.y <= character.y2
+      ) {
+        req.session.status.found.push(character.id);
+        req.session.status.notFound = req.session.status.notFound.filter(
+          (id) => id !== character.id
+        );
+      }
+    }
+
+    res.send({ status: req.session.status });
   });
 
   return router;

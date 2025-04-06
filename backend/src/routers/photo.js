@@ -14,7 +14,7 @@ function createPhotoRouter(database) {
       return;
     }
 
-    const photo = await database.getOnePhoto(req.params.id);
+    const photo = await database.getPhoto(req.params.id);
 
     if (photo) {
       res.send(photo);

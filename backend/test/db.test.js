@@ -1,6 +1,6 @@
 const {
   getPhotos,
-  getOnePhoto,
+  getPhoto,
   getLeaderBoard,
   createEntry,
   getEntries,
@@ -47,7 +47,7 @@ describe('getPhotos', () => {
   });
 });
 
-describe('getOnePhoto', () => {
+describe('getPhoto', () => {
   test('should return a photo with the correct id', async () => {
     const mockPhoto = {
       id: 1,
@@ -59,24 +59,30 @@ describe('getOnePhoto', () => {
 
     prismaMock.photo.findUnique.mockResolvedValue(mockPhoto);
 
-    const photo = await getOnePhoto(1);
+    const photo = await getPhoto(1);
 
     expect(photo).toEqual(mockPhoto);
     expect(prismaMock.photo.findUnique).toHaveBeenCalledTimes(1);
     expect(prismaMock.photo.findUnique).toHaveBeenCalledWith({
       where: { id: 1 },
+      include: {
+        Character: true,
+      },
     });
   });
 
   test('should return [] when no photo matches the id', async () => {
     prismaMock.photo.findUnique.mockResolvedValue(null);
 
-    const photo = await getOnePhoto(999);
+    const photo = await getPhoto(999);
 
     expect(photo).toBeNull();
     expect(prismaMock.photo.findUnique).toHaveBeenCalledTimes(1);
     expect(prismaMock.photo.findUnique).toHaveBeenCalledWith({
       where: { id: 999 },
+      include: {
+        Character: true,
+      },
     });
   });
 });
