@@ -1,5 +1,5 @@
 nav {
-  width: calc(100vw - 2em);
+  width: 100vw;
   display: flex;
   justify-content: space-between;
   align-items: center;

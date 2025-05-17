@@ -1,0 +1,37 @@
+import { render, screen } from '@testing-library/react';
+import PhotoLayout from '../src/PhotoLayout';
+
+beforeEach(() => {
+  vi.resetAllMocks();
+});
+
+test('renders loading state, then photos from API', async () => {
+  vi.spyOn(globalThis, 'fetch').mockResolvedValueOnce({
+    ok: true,
+    json: async () => [
+      { id: 1, title: 'At the beach', path: '/beach.jpg' },
+      { id: 2, title: 'In the city', path: '/city.jpg' },
+    ],
+  } as Response);
+
+  render(<PhotoLayout />);
+
+  expect(screen.getByText(/loading/i)).toBeInTheDocument();
+
+  expect(await screen.findByText('At the beach')).toBeInTheDocument();
+  expect(await screen.findByText('In the city')).toBeInTheDocument();
+});
+
+test('renders error message when fetch fails', async () => {
+  vi.spyOn(globalThis, 'fetch').mockResolvedValueOnce({
+    ok: false,
+    status: 500,
+    json: async () => ({ error: 'Server error' }),
+  } as Response);
+
+  render(<PhotoLayout />);
+
+  expect(screen.getByText(/loading/i)).toBeInTheDocument();
+
+  expect(await screen.findByText(/error/i)).toBeInTheDocument();
+});

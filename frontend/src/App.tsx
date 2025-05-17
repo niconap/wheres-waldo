@@ -1,5 +1,6 @@
 import Nav from './Nav';
 import './App.css';
+import PhotoLayout from './PhotoLayout';
 
 function App() {
   return (
@@ -8,6 +9,7 @@ function App() {
       <main>
         <h1>Oh no!</h1>
         <p>Where have Waldo and his friends gone? Can you help find them?</p>
+        <PhotoLayout />
       </main>
     </>
   );

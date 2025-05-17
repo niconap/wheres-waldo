@@ -1,4 +1,5 @@
 require('dotenv').config();
+const cors = require('cors');
 const express = require('express');
 const session = require('express-session');
 const { PrismaSessionStore } = require('@quixo3/prisma-session-store');
@@ -10,6 +11,8 @@ const createGameRouter = require('./routers/game.js');
 
 function createApp(database) {
   const app = express();
+
+  app.use(cors());
 
   app.use(express.json());
   app.use(
