@@ -1,16 +1,21 @@
 import './Nav.css';
+import { Link } from 'react-router-dom';
 
 function Nav() {
   return (
     <nav>
-      <h1>Where's Waldo?</h1>
+      <Link to="/">
+        <h1>Where's Waldo?</h1>
+      </Link>
       <div>
         <ul id="nav-link">
           <li>
-            <a href="#">Leaderboards</a>
+            <Link to="/leaderboards">Leaderboards</Link>
           </li>
         </ul>
-        <button id="theme-button" aria-label="Toggle Theme">Toggle Theme</button>
+        <button id="theme-button" aria-label="Toggle Theme">
+          Toggle Theme
+        </button>
       </div>
     </nav>
   );

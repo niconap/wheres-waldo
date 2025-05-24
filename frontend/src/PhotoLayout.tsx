@@ -1,11 +1,13 @@
-import { Photo } from './utils/types';
-
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+
 import { fetchPhotos } from './utils/photos';
+import { Photo } from './utils/types';
 
 function PhotoLayout() {
   const [photos, setPhotos] = useState<Photo[]>([]);
   const [error, setError] = useState<string | null>(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -34,6 +36,12 @@ function PhotoLayout() {
         <div key={photo.id} className="photo">
           <h2>{photo.title}</h2>
           <img src={photo.path} alt={photo.title} />
+          <button
+            aria-label="View photo"
+            onClick={() => navigate(`/photo/${photo.id}`)}
+          >
+            Play
+          </button>
         </div>
       ))}
     </div>

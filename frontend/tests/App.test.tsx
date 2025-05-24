@@ -1,15 +1,25 @@
-import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
+import { render, screen } from '@testing-library/react';
+import { MemoryRouter } from 'react-router-dom';
+
 import App from '../src/App';
 
 test('renders the Nav bar', () => {
-  render(<App />);
+  render(
+    <MemoryRouter>
+      <App />
+    </MemoryRouter>
+  );
   const navElement = screen.getByRole('navigation');
   expect(navElement).toBeInTheDocument();
 });
 
 test('renders the title and description', () => {
-  render(<App />);
+  render(
+    <MemoryRouter>
+      <App />
+    </MemoryRouter>
+  );
 
   const titleElement = screen.getByRole('heading', {
     name: /oh no\!/i,
