@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 
 import { fetchPhotos } from './utils/photos';
 import { Photo } from './utils/types';
+import './PhotoLayout.css';
 
 function PhotoLayout() {
   const [photos, setPhotos] = useState<Photo[]>([]);

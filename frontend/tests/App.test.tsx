@@ -22,7 +22,7 @@ test('renders the title and description', () => {
   );
 
   const titleElement = screen.getByRole('heading', {
-    name: /oh no\!/i,
+    name: /oh no!/i,
   });
 
   const descriptionElement = screen.getByText(

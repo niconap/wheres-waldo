@@ -4,7 +4,7 @@ nav {
   justify-content: space-between;
   align-items: center;
   max-height: 10vh;
-  padding: 0 1em;
+  padding: 1em;
   box-shadow: 0 0 10px rgb(224, 224, 224);
 }
 

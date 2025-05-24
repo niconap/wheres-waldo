@@ -13,6 +13,31 @@ else
   exit 1
 fi
 
+echo "${BLUE}Checking if Docker daemon is running...${RESET}"
+if ! docker info > /dev/null 2>&1; then
+  echo "${RED}Docker daemon is not running. Attempting to start it...${RESET}"
+  if command -v systemctl > /dev/null 2>&1; then
+    if sudo systemctl start docker; then
+      echo "${GREEN}Docker daemon started successfully!${RESET}"
+    else
+      echo "${RED}Failed to start Docker daemon with systemctl!${RESET}"
+      exit 1
+    fi
+  elif command -v service > /dev/null 2>&1; then
+    if sudo service docker start; then
+      echo "${GREEN}Docker daemon started successfully!${RESET}"
+    else
+      echo "${RED}Failed to start Docker daemon with service!${RESET}"
+      exit 1
+    fi
+  else
+    echo "${RED}Could not find a way to start Docker daemon. Please start it manually.${RESET}"
+    exit 1
+  fi
+else
+  echo "${GREEN}Docker daemon is running.${RESET}"
+fi
+
 echo "${BLUE}Checking for existing container...${RESET}"
 if [ "$(docker ps -aq -f name=$DB_CONTAINER_NAME)" ]; then
   echo "${BLUE}Removing existing container $DB_CONTAINER_NAME...${RESET}"
@@ -77,3 +102,4 @@ fi
 
 echo "${BLUE}To stop the database container, run: docker stop $DB_CONTAINER_NAME${RESET}"
 echo "${BLUE}To remove the container, run: docker rm $DB_CONTAINER_NAME${RESET}"
+echo "${BLUE}To start the app, use npm run start{RESET}"
