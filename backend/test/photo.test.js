@@ -92,22 +92,22 @@ describe('GET /photo/:id', () => {
 
     const response = await supertest(app).get('/photo/1');
     expect(response.headers['content-type']).toMatch(/json/);
-    expect(mockDatabase.getPhoto).toHaveBeenCalledWith('1');
+    expect(mockDatabase.getPhoto).toHaveBeenCalledWith(1);
     expect(response.status).toBe(200);
     expect(response.body).toEqual(mockPhotos[0]);
 
     const response2 = await supertest(app).get('/photo/2');
     expect(response.headers['content-type']).toMatch(/json/);
-    expect(mockDatabase.getPhoto).toHaveBeenCalledWith('2');
+    expect(mockDatabase.getPhoto).toHaveBeenCalledWith(2);
     expect(response2.status).toBe(200);
     expect(response2.body).toEqual(mockPhotos[1]);
 
     expect(mockDatabase.getPhoto).toHaveBeenCalledTimes(2);
   });
 
-  test('returns a 403 status when using an incorrect ID format', async () => {
+  test('returns a 400 status when using an incorrect ID format', async () => {
     const response = await supertest(app).get('/photo/abc');
-    expect(response.statusCode).toBe(403);
+    expect(response.statusCode).toBe(400);
     expect(response.body.error).toEqual('Invalid ID format provided');
     expect(mockDatabase.getPhoto).toHaveBeenCalledTimes(0);
     expect(mockDatabase.getPhotos).toHaveBeenCalledTimes(0);

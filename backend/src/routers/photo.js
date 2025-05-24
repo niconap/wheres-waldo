@@ -10,7 +10,7 @@ function createPhotoRouter(database) {
 
   router.get('/:id', async (req, res) => {
     if (isNaN(req.params.id) && isNaN(parseInt(req.params.id))) {
-      res.status(403).send({ error: 'Invalid ID format provided' });
+      res.status(400).send({ error: 'Invalid ID format provided' });
       return;
     }
 

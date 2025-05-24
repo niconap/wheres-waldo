@@ -12,17 +12,22 @@ function createLeaderboardRouter(database) {
       database.createEntry(leaderboardId, name, score);
       res.status(200).json({ score });
     } else {
-      res.sendStatus(403);
+      res.sendStatus(400);
     }
   });
 
   router.get('/:id', async (req, res) => {
     if (isNaN(req.params.id) && isNaN(parseInt(req.params.id))) {
-      res.status(403).send({ error: 'Invalid ID format provided' });
+      res.status(400).send({ error: 'Invalid ID format provided' });
       return;
     }
 
-    const leaderboard = await database.getLeaderBoard(req.params.id);
+    const id = Number(req.params.id);
+    if (isNaN(id)) {
+      res.status(400).send({ error: 'ID must be a valid number' });
+      return;
+    }
+    const leaderboard = await database.getLeaderBoard(id);
 
     if (leaderboard) {
       res.send(leaderboard);

@@ -5,12 +5,18 @@ function createGameRouter(database) {
 
   router.post('/start/:photoId', async (req, res) => {
     if (isNaN(req.params.photoId) && isNaN(parseInt(req.params.photoId))) {
-      res.status(403).send({ error: 'Invalid ID format provided' });
+      res.status(400).send({ error: 'Invalid ID format provided' });
       return;
     }
 
-    const photo = await database.getPhoto(req.params.photoId);
-    const leaderboard = await database.getLeaderBoard(req.params.photoId);
+    const photoId = Number(req.params.photoId);
+    if (isNaN(photoId)) {
+      res.status(400).send({ error: 'ID must be a valid number' });
+      return;
+    }
+
+    const photo = await database.getPhoto(photoId);
+    const leaderboard = await database.getLeaderBoard(photoId);
 
     if (!photo || !leaderboard) {
       res.sendStatus(404);
@@ -32,7 +38,7 @@ function createGameRouter(database) {
 
   router.post('/guess/:photoId', async (req, res) => {
     if (isNaN(req.params.photoId) && isNaN(parseInt(req.params.photoId))) {
-      res.status(403).send({ error: 'Invalid ID format provided' });
+      res.status(400).send({ error: 'Invalid ID format provided' });
       return;
     }
 

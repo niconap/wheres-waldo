@@ -21,7 +21,7 @@ describe('GET /leaderboard/:id', () => {
     const response = await supertest(app).get('/leaderboard/1');
 
     expect(response.statusCode).toBe(404);
-    expect(mockDatabase.getLeaderBoard).toHaveBeenCalledWith('1');
+    expect(mockDatabase.getLeaderBoard).toHaveBeenCalledWith(1);
     expect(mockDatabase.getLeaderBoard).toHaveBeenCalledTimes(1);
   });
 
@@ -39,7 +39,7 @@ describe('GET /leaderboard/:id', () => {
     expect(response.body).toEqual(mockLeaderboard);
     expect(response.statusCode).toBe(200);
     expect(response.headers['content-type']).toMatch(/json/);
-    expect(mockDatabase.getLeaderBoard).toHaveBeenCalledWith('1');
+    expect(mockDatabase.getLeaderBoard).toHaveBeenCalledWith(1);
     expect(mockDatabase.getLeaderBoard).toHaveBeenCalledTimes(1);
   });
 
@@ -60,13 +60,13 @@ describe('GET /leaderboard/:id', () => {
     expect(response.body).toEqual(mockLeaderboardWithEntries);
     expect(response.statusCode).toBe(200);
     expect(response.headers['content-type']).toMatch(/json/);
-    expect(mockDatabase.getLeaderBoard).toHaveBeenCalledWith('1');
+    expect(mockDatabase.getLeaderBoard).toHaveBeenCalledWith(1);
     expect(mockDatabase.getLeaderBoard).toHaveBeenCalledTimes(1);
   });
 
-  test('returns a 403 status when using an incorrect ID format', async () => {
+  test('returns a 400 status when using an incorrect ID format', async () => {
     const response = await supertest(app).get('/leaderboard/abc');
-    expect(response.statusCode).toBe(403);
+    expect(response.statusCode).toBe(400);
     expect(response.body.error).toEqual('Invalid ID format provided');
     expect(mockDatabase.getLeaderBoard).toHaveBeenCalledTimes(0);
   });
@@ -101,8 +101,8 @@ describe('POST /leaderboard/entry', () => {
     expect(mockDatabase.createEntry).toHaveBeenCalledTimes(1);
   });
 
-  test('returns status code 403 when no name is sent', async () => {
+  test('returns status code 400 when no name is sent', async () => {
     const response = await supertest(app).post('/leaderboard/entry');
-    expect(response.statusCode).toBe(403);
+    expect(response.statusCode).toBe(400);
   });
 });
