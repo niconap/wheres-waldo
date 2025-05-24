@@ -14,7 +14,13 @@ function createPhotoRouter(database) {
       return;
     }
 
-    const photo = await database.getPhoto(req.params.id);
+    const id = Number(req.params.id);
+    if (isNaN(id)) {
+      res.status(400).send({ error: 'ID must be a valid number' });
+      return;
+    }
+
+    const photo = await database.getPhoto(id);
 
     if (photo) {
       res.send(photo);
