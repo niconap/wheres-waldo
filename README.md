@@ -10,10 +10,10 @@ Replace the parts between the inequality signs `<` and `>` with the correct
 values.
 
 For the frontend, create the file `frontend/.env`, and add the following
-variables:
+variable (make sure the URL does **not** end with a `/`):
 
 ```
-VITE_API_URL=<API link>
+VITE_API_URL=<API URL>
 ```
 
 For the backend, create the file `backend/.env`, and add the following

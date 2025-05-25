@@ -8,8 +8,8 @@ function Nav() {
     const themeButton = document.getElementById('theme-button');
     if (themeButton) {
       themeButton.textContent = body.classList.contains('dark-mode')
-        ? 'Light Mode'
-        : 'Dark Mode';
+        ? 'Light mode'
+        : 'Dark mode';
     }
   };
 

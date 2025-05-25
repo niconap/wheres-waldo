@@ -8,8 +8,8 @@
 }
 
 .photo {
-  flex: 1 1 calc(100%/3 - 3rem);
-  max-width: calc(100%/3 - 3rem);
+  flex: 1 1 calc((100% - 2 * 3rem) / 3);
+  max-width: calc((100% - 2 * 3rem) / 3);
   border: 3px solid var(--border-color);
   border-radius: 10px;
   box-shadow: 0 2px 4px var(--shadow-color);
