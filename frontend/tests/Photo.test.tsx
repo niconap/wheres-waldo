@@ -26,7 +26,9 @@ test('renders loading state, then photo info from API', async () => {
   );
 
   expect(screen.getByText(/loading/i)).toBeInTheDocument();
-  expect(await screen.findByText('At the beach')).toBeInTheDocument();
+  expect(
+    await screen.findByRole('heading', { name: 'At the beach' })
+  ).toBeInTheDocument();
   expect(screen.getByAltText('At the beach')).toBeInTheDocument();
 });
 

@@ -8,7 +8,7 @@ function App() {
       <Nav />
       <main>
         <h1>Oh no!</h1>
-        <p>Where have Waldo and his friends gone? Can you help find them?</p>
+        <h4>Where have Waldo and his friends gone? Can you help find them?</h4>
         <PhotoLayout />
       </main>
     </>

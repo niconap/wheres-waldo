@@ -34,7 +34,7 @@ function PhotoLayout() {
   return (
     <div id="photo-layout">
       {photos.map((photo) => (
-        <div key={photo.id} className="photo">
+        <article key={photo.id} className="photo">
           <h2>{photo.title}</h2>
           <img src={photo.path} alt={photo.title} />
           <button
@@ -43,7 +43,7 @@ function PhotoLayout() {
           >
             Play
           </button>
-        </div>
+        </article>
       ))}
     </div>
   );

@@ -25,10 +25,11 @@ test('renders the title and description', () => {
     name: /oh no!/i,
   });
 
-  const descriptionElement = screen.getByText(
-    /where have waldo and his friends gone\? can you help find them\?/i
-  );
+  const subtitleElement = screen.getByRole('heading', {
+    name: /where have waldo and his friends gone\? can you help find them\?/i,
+    level: 4,
+  });
 
   expect(titleElement).toBeInTheDocument();
-  expect(descriptionElement).toBeInTheDocument();
+  expect(subtitleElement).toBeInTheDocument();
 });

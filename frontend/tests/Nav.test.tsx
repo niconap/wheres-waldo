@@ -11,7 +11,7 @@ describe('Navigation Bar', () => {
         <Nav />
       </MemoryRouter>
     );
-    const mainTitle = screen.getByText(/Where's Waldo\?/i);
+    const mainTitle = screen.getByRole('heading', { name: /Where's Waldo\?/i });
     expect(mainTitle).toBeInTheDocument();
   });
 

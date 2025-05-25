@@ -24,8 +24,10 @@ test('renders loading state, then photos from API', async () => {
   );
 
   expect(screen.getByText(/loading/i)).toBeInTheDocument();
-  expect(await screen.findByText('At the beach')).toBeInTheDocument();
-  expect(await screen.findByText('In the city')).toBeInTheDocument();
+  const cards = await screen.findAllByRole('article');
+  expect(cards).toHaveLength(2);
+  expect(cards[0]).toHaveTextContent('At the beach');
+  expect(cards[1]).toHaveTextContent('In the city');
 });
 
 test('renders error message when fetch fails', async () => {
