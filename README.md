@@ -3,6 +3,33 @@
 This is the Where's Waldo project from The Odin Project's curriculum. The goal
 is to recreate the Where's Waldo game using HTML, CSS, and JavaScript.
 
+### Environment variables
+
+Both the frontend and backend require environment variables in a `.env` file.
+Replace the parts between the inequality signs `<` and `>` with the correct
+values.
+
+For the frontend, create the file `frontend/.env`, and add the following
+variables:
+
+```
+VITE_API_URL=<API link>
+```
+
+For the backend, create the file `backend/.env`, and add the following
+variables:
+
+```
+DB_CONTAINER_NAME=waldo-db-container
+DB_USER=<username>
+DB_PASSWORD=<db_password>
+DB_NAME=waldo_db
+DB_PORT=5432
+DB_IMAGE=postgres:latest
+SESSION_SECRET=<session secret>
+DATABASE_URL="postgresql://<username>:<db_password>@localhost:5432/waldo_db"
+```
+
 ### Running the backend
 
 To run the backend, the database needs to be set up first. This requires Docker

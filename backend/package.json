@@ -14,11 +14,11 @@
   "devDependencies": {
     "jest": "^29.7.0",
     "jest-mock-extended": "^4.0.0-beta1",
-    "prisma": "^6.5.0",
+    "prisma": "^6.8.2",
     "supertest": "^7.1.0"
   },
   "dependencies": {
-    "@prisma/client": "^6.5.0",
+    "@prisma/client": "^6.8.2",
     "@quixo3/prisma-session-store": "^3.1.13",
     "cors": "^2.8.5",
     "dotenv": "^16.4.7",
