@@ -17,7 +17,7 @@ model Photo {
 
 model Leaderboard {
     id      Int     @id @default(autoincrement())
-    photoId Int
+    photoId Int     @unique
     photo   Photo   @relation(fields: [photoId], references: [id])
     Entry   Entry[]
 }

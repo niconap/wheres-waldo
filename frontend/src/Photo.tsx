@@ -1,9 +1,11 @@
 import { useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
+
 import { Photo as PhotoType } from './utils/types';
 import { fetchPhoto } from './utils/photos';
+import { startGame } from './utils/game.ts';
 import Nav from './Nav.tsx';
-import './Photo.css';
+import './css/Photo.css';
 
 function Photo() {
   const { photoId } = useParams<{ photoId: string }>();
@@ -22,6 +24,14 @@ function Photo() {
         setPhoto(photo);
       } catch {
         setError('Failed to load photo');
+      }
+
+      try {
+        if (photoId) {
+          await startGame(photoId);
+        }
+      } catch (error) {
+        console.error('Failed to start game:', error);
       }
     };
     fetchData();

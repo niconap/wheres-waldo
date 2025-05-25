@@ -1,5 +1,5 @@
 import Nav from './Nav';
-import './App.css';
+import './css/App.css';
 import PhotoLayout from './PhotoLayout';
 
 function App() {
