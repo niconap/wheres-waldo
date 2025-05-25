@@ -1,5 +1,6 @@
-import './css/Nav.css';
 import { Link } from 'react-router-dom';
+
+import './css/Nav.css';
 
 function Nav() {
   const toggleTheme = () => {
