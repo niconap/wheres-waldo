@@ -29,10 +29,19 @@ function createGameRouter(database) {
       found: [],
       notFound: photo.Character.map((character) => character.id),
     };
+    const characterMap = {};
+    await Promise.all(
+      photo.Character.map(async ({ id }) => {
+        const character = await database.getCharacter(id);
+        characterMap[id] = character.name;
+      })
+    );
+
     res.json({
       start: req.session.start,
       leaderboardId: req.session.leaderboardId,
       status: req.session.status,
+      characterMap: characterMap,
     });
   });
 

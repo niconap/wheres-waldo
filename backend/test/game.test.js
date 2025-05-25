@@ -62,6 +62,7 @@ describe('POST /game/start/:photoId', () => {
   test('creates a session and correctly sets the required characters', async () => {
     const response = await supertest(app).post('/game/start/1');
     expect(response.body.status).toEqual({ found: [], notFound: [1, 2] });
+    expect(response.body.characterMap[1]).toBe('Waldo');
   });
 });
 
