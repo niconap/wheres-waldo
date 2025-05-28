@@ -9,72 +9,72 @@ RESET="\e[0m"
 if [ -f .env ]; then
   export $(grep -v '^#' .env | xargs)
 else
-  echo "${RED}.env file not found. Please create one with the required variables.${RESET}"
+  printf "${RED}.env file not found. Please create one with the required variables.${RESET}\n"
   exit 1
 fi
 
-echo "${BLUE}Checking for existing container...${RESET}"
+printf "${BLUE}Checking for existing container...${RESET}\n"
 if [ "$(docker ps -aq -f name=$DB_CONTAINER_NAME)" ]; then
-  echo "${BLUE}Removing existing container $DB_CONTAINER_NAME...${RESET}"
+  printf "${BLUE}Removing existing container $DB_CONTAINER_NAME...${RESET}\n"
   if docker rm -f $DB_CONTAINER_NAME; then
-    echo "${GREEN}Removed existing container successfully!${RESET}"
+    printf "${GREEN}Removed existing container successfully!${RESET}\n"
   else
-    echo "${RED}Failed to remove existing container!${RESET}"
+    printf "${RED}Failed to remove existing container!${RESET}\n"
     exit 1
   fi
 else
-  echo "${GREEN}No existing container found.${RESET}"
+  printf "${GREEN}No existing container found.${RESET}\n"
 fi
 
-echo "${BLUE}Starting PostgreSQL Docker container...${RESET}"
+printf "${BLUE}Starting PostgreSQL Docker container...${RESET}\n"
 if docker run --name $DB_CONTAINER_NAME -e POSTGRES_USER=$DB_USER -e POSTGRES_PASSWORD=$DB_PASSWORD -e POSTGRES_DB=$DB_NAME -p $DB_PORT:5432 -d $DB_IMAGE; then
-  echo "${GREEN}PostgreSQL container started successfully!${RESET}"
+  printf "${GREEN}PostgreSQL container started successfully!${RESET}\n"
 else
-  echo "${RED}Failed to start PostgreSQL container!${RESET}"
+  printf "${RED}Failed to start PostgreSQL container!${RESET}\n"
   exit 1
 fi
 
-echo "${BLUE}Waiting for the database to be ready...${RESET}"
+printf "${BLUE}Waiting for the database to be ready...${RESET}\n"
 until docker exec $DB_CONTAINER_NAME pg_isready -U $DB_USER > /dev/null 2>&1; do
   sleep 1
 done
-echo "${GREEN}Database is ready!${RESET}"
+printf "${GREEN}Database is ready!${RESET}\n"
 
-echo "${BLUE}Setting up .env file...${RESET}"
+printf "${BLUE}Setting up .env file...${RESET}\n"
 if grep -q "^DATABASE_URL=" .env; then
-  echo "${BLUE}Replacing existing DATABASE_URL in .env file...${RESET}"
+  printf "${BLUE}Replacing existing DATABASE_URL in .env file...${RESET}\n"
   if sed -i "s|^DATABASE_URL=.*|DATABASE_URL=\"postgresql://$DB_USER:$DB_PASSWORD@localhost:$DB_PORT/$DB_NAME\"|" .env; then
-    echo "${GREEN}DATABASE_URL replaced successfully!${RESET}"
+    printf "${GREEN}DATABASE_URL replaced successfully!${RESET}\n"
   else
-    echo "${RED}Failed to replace DATABASE_URL!${RESET}"
+    printf "${RED}Failed to replace DATABASE_URL!${RESET}\n"
     exit 1
   fi
 else
-  echo "${BLUE}Adding DATABASE_URL to .env file...${RESET}"
+  printf "${BLUE}Adding DATABASE_URL to .env file...${RESET}\n"
   if echo "" >> .env && echo "DATABASE_URL=\"postgresql://$DB_USER:$DB_PASSWORD@localhost:$DB_PORT/$DB_NAME\"" >> .env; then
-    echo "${GREEN}DATABASE_URL added successfully!${RESET}"
+    printf "${GREEN}DATABASE_URL added successfully!${RESET}\n"
   else
-    echo "${RED}Failed to add DATABASE_URL!${RESET}"
+    printf "${RED}Failed to add DATABASE_URL!${RESET}\n"
     exit 1
   fi
 fi
 
-echo "${BLUE}Running Prisma migrations...${RESET}"
+printf "${BLUE}Running Prisma migrations...${RESET}\n"
 if npx prisma migrate dev --name init; then
-  echo "${GREEN}Prisma migrations applied successfully!${RESET}"
+  printf "${GREEN}Prisma migrations applied successfully!${RESET}\n"
 else
-  echo "${RED}Failed to apply Prisma migrations!${RESET}"
+  printf "${RED}Failed to apply Prisma migrations!${RESET}\n"
   exit 1
 fi
 
-echo "${BLUE}Seeding the database...${RESET}"
+printf "${BLUE}Seeding the database...${RESET}\n"
 if node prisma/seed.js; then
-  echo "${GREEN}Filled the database successfully!${RESET}"
+  printf "${GREEN}Filled the database successfully!${RESET}\n"
 else
-  echo "${RED}Failed to fill the database!${RESET}"
+  printf "${RED}Failed to fill the database!${RESET}\n"
   exit 1
 fi
 
-echo "${BLUE}To stop the database container, run: docker stop $DB_CONTAINER_NAME${RESET}"
-echo "${BLUE}To remove the container, run: docker rm $DB_CONTAINER_NAME${RESET}"
-echo "${BLUE}To start the app, use npm run start${RESET}"
+printf "${BLUE}To stop the database container, run: docker stop $DB_CONTAINER_NAME${RESET}\n"
+printf "${BLUE}To remove the container, run: docker rm $DB_CONTAINER_NAME${RESET}\n"
+printf "${BLUE}To start the app, use npm run start${RESET}\n"

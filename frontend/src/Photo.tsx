@@ -15,6 +15,7 @@ function Photo() {
   const [gameData, setGameData] = useState<Game | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [showFloater, setShowFloater] = useState<boolean>(false);
+  const [time, setTime] = useState<string>("00:00");
   const [coords, setCoords] = useState<{ x: number; y: number } | null>(null);
 
   useEffect(() => {
@@ -43,6 +44,20 @@ function Photo() {
     fetchData();
   }, [photoId]);
 
+  useEffect(() => {
+    let count = 0;
+    setInterval(() => {
+        count += 1;
+        let seconds = count % 60;
+        let minutes = (count - seconds) / 60;
+        if (seconds < 10) {
+            setTime(`${minutes}:0${seconds}`)
+        } else {
+            setTime(`${minutes}:${seconds}`)
+        }
+    }, 1000)
+  }, [gameData])
+
   const handleClick = async (e: React.MouseEvent<HTMLImageElement>) => {
     const rect = e.currentTarget.getBoundingClientRect();
     const x = ((e.clientX - rect.left) / rect.width) * 100;
@@ -61,6 +76,7 @@ function Photo() {
         {photo && (
           <div id="photo">
             <h1>{photo.title}</h1>
+            <h3>{time}</h3>
             <img onClick={handleClick} src={photo.path} alt={photo.title} />
             {showFloater && (
               <Floater
