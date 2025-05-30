@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { Photo as PhotoType, Game } from './utils/types';
 import { fetchPhoto } from './utils/photos';
 import { startGame } from './utils/game.ts';
+import { guess } from './utils/game.ts';
 import Nav from './Nav.tsx';
 import './css/Photo.css';
 import Floater from './Floater.tsx';
@@ -15,8 +16,16 @@ function Photo() {
   const [gameData, setGameData] = useState<Game | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [showFloater, setShowFloater] = useState<boolean>(false);
-  const [time, setTime] = useState<string>("00:00");
+  const [time, setTime] = useState<string>("0:00");
   const [coords, setCoords] = useState<{ x: number; y: number } | null>(null);
+
+  const passGuess = (name: string) => {
+    console.log(name);
+    if (coords) {
+      let data = guess(Number(photoId), name, coords?.x, coords?.y);
+      console.log(data);
+    }
+  }
 
   useEffect(() => {
     const fetchData = async () => {
@@ -83,6 +92,7 @@ function Photo() {
                 characterMap={gameData?.characterMap || {}}
                 coords={coords}
                 dismount={() => setShowFloater(false)}
+                passGuess={passGuess}
               />
             )}
           </div>

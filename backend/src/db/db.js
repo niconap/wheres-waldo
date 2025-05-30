@@ -15,7 +15,7 @@ async function getPhotos() {
  */
 async function getPhoto(id) {
   return await prisma.photo.findUnique({
-    where: { id },
+    where: { id: id },
     include: {
       Character: true,
     },

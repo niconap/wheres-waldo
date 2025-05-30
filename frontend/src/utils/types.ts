@@ -17,5 +17,14 @@ export type Game = {
 export type FloaterProps = {
   coords?: { x: number; y: number } | null;
   dismount?: () => void;
+  passGuess: (name: string) => void;
   characterMap?: Record<number, string>;
 };
+
+export type Guess = {
+  status: {
+    found: number[];
+    notFound: number[];
+  };
+  score: number | null;
+}
