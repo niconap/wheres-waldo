@@ -26,8 +26,8 @@ DB_PASSWORD=<db_password>
 DB_NAME=waldo_db
 DB_PORT=5432
 DB_IMAGE=postgres:latest
-SESSION_SECRET=<session secret>
 DATABASE_URL="postgresql://<username>:<db_password>@localhost:5432/waldo_db"
+JWT_SECRET=<jwt secret>
 ```
 
 ### Running the backend

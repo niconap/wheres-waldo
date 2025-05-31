@@ -1,15 +1,16 @@
 const express = require('express');
 
+const { authenticateJWT } = require('../utils/jwt.js');
+
 function createLeaderboardRouter(database) {
   const router = express.Router();
 
-  router.post('/entry', async (req, res) => {
-    const start = req.session.start;
-    const leaderboardId = req.session.leaderboardId;
-    const score = req.session.score;
+  router.post('/entry', authenticateJWT, async (req, res) => {
+    const { start, leaderboardId, score } = req.user;
     const name = req.body.name;
-    if (start && name) {
-      database.createEntry(leaderboardId, name, score);
+
+    if (start && name && leaderboardId != null && score != null) {
+      await database.createEntry(leaderboardId, name, score);
       res.status(200).json({ score });
     } else {
       res.sendStatus(400);

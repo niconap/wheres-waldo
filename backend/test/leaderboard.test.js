@@ -1,6 +1,8 @@
 const supertest = require('supertest');
 const createApp = require('../src/app');
 
+const { sign } = require('../src/utils/jwt');
+
 const mockDatabase = {
   getLeaderBoard: jest.fn(),
   createEntry: jest.fn(),
@@ -73,9 +75,20 @@ describe('GET /leaderboard/:id', () => {
 });
 
 describe('POST /leaderboard/entry', () => {
+  function makeToken(overrides = {}) {
+    return sign({
+      start: Date.now(),
+      leaderboardId: 1,
+      score: 1000,
+      ...overrides,
+    });
+  }
+
   test('returns status code 200 when a valid name is sent', async () => {
+    const token = makeToken();
     const response = await supertest(app)
       .post('/leaderboard/entry')
+      .set('Authorization', `Bearer ${token}`)
       .send({ name: 'Nico' });
     expect(response.statusCode).toBe(200);
   });
@@ -90,8 +103,10 @@ describe('POST /leaderboard/entry', () => {
 
     mockDatabase.createEntry.mockResolvedValue(mockEntry);
 
+    const token = makeToken();
     const response = await supertest(app)
       .post('/leaderboard/entry')
+      .set('Authorization', `Bearer ${token}`)
       .send({ name: 'Nico' });
 
     expect(response.statusCode).toBe(200);
@@ -102,7 +117,26 @@ describe('POST /leaderboard/entry', () => {
   });
 
   test('returns status code 400 when no name is sent', async () => {
-    const response = await supertest(app).post('/leaderboard/entry');
+    const token = makeToken();
+    const response = await supertest(app)
+      .post('/leaderboard/entry')
+      .set('Authorization', `Bearer ${token}`);
+    expect(response.statusCode).toBe(400);
+  });
+
+  test('returns 401 if no token is sent', async () => {
+    const response = await supertest(app)
+      .post('/leaderboard/entry')
+      .send({ name: 'Nico' });
+    expect(response.statusCode).toBe(401);
+  });
+
+  test('returns 400 if required JWT fields are missing', async () => {
+    const token = sign({});
+    const response = await supertest(app)
+      .post('/leaderboard/entry')
+      .set('Authorization', `Bearer ${token}`)
+      .send({ name: 'Nico' });
     expect(response.statusCode).toBe(400);
   });
 });

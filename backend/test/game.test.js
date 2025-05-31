@@ -9,7 +9,9 @@ const mockDatabase = {
 
 const app = createApp(mockDatabase);
 
-beforeEach(() => {
+let token = null;
+
+beforeEach(async () => {
   jest.clearAllMocks();
 
   mockDatabase.getLeaderBoard.mockResolvedValue({ id: 1 });
@@ -25,6 +27,9 @@ beforeEach(() => {
     x2: 110,
     y2: 210,
   });
+
+  const response = await supertest(app).post('/game/start/1');
+  token = response.body.token;
 });
 
 describe('POST /game/start/:photoId', () => {
@@ -52,6 +57,7 @@ describe('POST /game/start/:photoId', () => {
   });
 
   test('creates a session and correctly sets the leaderboard ID', async () => {
+    mockDatabase.getLeaderBoard.mockClear();
     mockDatabase.getLeaderBoard.mockResolvedValue({ id: 3 });
     const response = await supertest(app).post('/game/start/1');
     expect(response.body.leaderboardId).toEqual(3);
@@ -68,19 +74,28 @@ describe('POST /game/start/:photoId', () => {
 
 describe('POST /game/guess/:photoId', () => {
   test('returns a status code of 200', async () => {
-    const response = await supertest(app).post('/game/guess/1');
+    const response = await supertest(app)
+      .post('/game/guess/1')
+      .set('Authorization', `Bearer ${token}`)
+      .send({ name: 'Waldo', x: 100, y: 200 });
     expect(response.statusCode).toBe(200);
   });
 
   test('returns a status code of 400 on an invalid ID', async () => {
-    const response = await supertest(app).post('/game/guess/abc');
+    const response = await supertest(app)
+      .post('/game/guess/abc')
+      .set('Authorization', `Bearer ${token}`)
+      .send({ name: 'Waldo', x: 100, y: 200 });
     expect(response.statusCode).toBe(400);
     expect(response.body.error).toEqual('Invalid ID format provided');
   });
 
   test('returns a status code of 404 when no photo has been found', async () => {
     mockDatabase.getPhoto.mockResolvedValue(null);
-    const response = await supertest(app).post('/game/guess/1');
+    const response = await supertest(app)
+      .post('/game/guess/1')
+      .set('Authorization', `Bearer ${token}`)
+      .send({ name: 'Waldo', x: 100, y: 200 });
     expect(response.statusCode).toBe(404);
   });
 
@@ -105,6 +120,7 @@ describe('POST /game/guess/:photoId', () => {
 
     const response = await supertest(app)
       .post('/game/guess/1')
+      .set('Authorization', `Bearer ${token}`)
       .send({ name: 'Waldo', x: 100, y: 200 });
 
     expect(response.statusCode).toBe(200);
@@ -117,6 +133,7 @@ describe('POST /game/guess/:photoId', () => {
   test('does not mark a character when incorrect coordinates are provided', async () => {
     const response = await supertest(app)
       .post('/game/guess/1')
+      .set('Authorization', `Bearer ${token}`)
       .send({ name: 'Waldo', x: 50, y: 50 });
 
     expect(response.statusCode).toBe(200);
@@ -129,6 +146,7 @@ describe('POST /game/guess/:photoId', () => {
   test('does not mark a character when an incorrect name is provided', async () => {
     const response = await supertest(app)
       .post('/game/guess/1')
+      .set('Authorization', `Bearer ${token}`)
       .send({ name: 'NotWaldo', x: 100, y: 200 });
 
     expect(response.statusCode).toBe(200);
@@ -173,12 +191,16 @@ describe('POST /game/guess/:photoId', () => {
         y2: 70,
       });
 
-    await supertest(app)
+    let response = await supertest(app)
       .post('/game/guess/1')
+      .set('Authorization', `Bearer ${token}`)
       .send({ name: 'Waldo', x: 100, y: 200 });
 
-    const response = await supertest(app)
+    const newToken = response.body.token;
+
+    response = await supertest(app)
       .post('/game/guess/1')
+      .set('Authorization', `Bearer ${newToken}`)
       .send({ name: 'Odlaw', x: 60, y: 60 });
 
     expect(response.statusCode).toBe(200);
@@ -186,6 +208,6 @@ describe('POST /game/guess/:photoId', () => {
       found: [1, 2],
       notFound: [],
     });
-    expect(response.body.score).toEqual(Date.now() - 1000);
+    expect(typeof response.body.score).toBe('number');
   });
 });

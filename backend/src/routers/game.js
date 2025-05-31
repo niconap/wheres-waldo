@@ -1,5 +1,7 @@
 const express = require('express');
 
+const { sign, authenticateJWT } = require('../utils/jwt.js');
+
 function createGameRouter(database) {
   const router = express.Router();
 
@@ -23,12 +25,6 @@ function createGameRouter(database) {
       return;
     }
 
-    req.session.start = Date.now();
-    req.session.leaderboardId = leaderboard.id;
-    req.session.status = {
-      found: [],
-      notFound: photo.Character.map((character) => character.id),
-    };
     const characterMap = {};
     await Promise.all(
       photo.Character.map(async ({ id }) => {
@@ -37,27 +33,48 @@ function createGameRouter(database) {
       })
     );
 
+    const startTime = Date.now();
+    const token = sign({
+      start: startTime,
+      leaderboardId: leaderboard.id,
+      status: {
+        found: [],
+        notFound: photo.Character.map((character) => character.id),
+      },
+      photoId: photo.id,
+    });
+
     res.json({
-      start: req.session.start,
-      leaderboardId: req.session.leaderboardId,
-      status: req.session.status,
-      characterMap: characterMap,
+      start: startTime,
+      leaderboardId: leaderboard.id,
+      status: {
+        found: [],
+        notFound: photo.Character.map((character) => character.id),
+      },
+      characterMap: Object.fromEntries(
+        Object.entries(characterMap).map(([id, name]) => [Number(id), name])
+      ),
+      token: token,
     });
   });
 
-  router.post('/guess/:photoId', async (req, res) => {
+  router.post('/guess/:photoId', authenticateJWT, async (req, res) => {
     if (isNaN(req.params.photoId) && isNaN(parseInt(req.params.photoId))) {
       res.status(400).send({ error: 'Invalid ID format provided' });
       return;
     }
 
-    const photo = await database.getPhoto(req.params.id);
+    let gameState = req.user;
+
+    const id = Number(req.params.photoId);
+    const photo = await database.getPhoto(id);
 
     if (!photo) {
       res.sendStatus(404);
       return;
     }
 
+    let foundCharacter = null;
     for (const element of photo.Character) {
       const character = await database.getCharacter(element.id);
       if (
@@ -67,20 +84,33 @@ function createGameRouter(database) {
         req.body.y >= character.y1 &&
         req.body.y <= character.y2
       ) {
-        req.session.status.found.push(character.id);
-        req.session.status.notFound = req.session.status.notFound.filter(
-          (id) => id !== character.id
+        foundCharacter = character;
+        break;
+      }
+    }
+
+    if (foundCharacter) {
+      if (!gameState.status.found.includes(foundCharacter.id)) {
+        gameState.status.found.push(foundCharacter.id);
+        gameState.status.notFound = gameState.status.notFound.filter(
+          (id) => id !== foundCharacter.id
         );
       }
     }
 
-    if (req.session.status.notFound.length === 0) {
-      req.session.score = Date.now() - req.session.start;
-      res.send({ status: req.session.status, score: req.session.score });
-      return;
+    let score = null;
+    if (gameState.status.notFound.length === 0) {
+      score = Date.now() - gameState.start;
+      gameState.score = score;
     }
 
-    res.send({ status: req.session.status });
+    const newToken = sign(gameState);
+
+    res.send({
+      status: gameState.status,
+      score,
+      token: newToken,
+    });
   });
 
   return router;
