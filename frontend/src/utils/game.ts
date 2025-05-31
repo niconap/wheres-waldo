@@ -11,6 +11,7 @@ export async function startGame(photoId: string): Promise<Game> {
     throw new Error('Failed to start game');
   }
   const data = await response.json();
+  localStorage.setItem('gameToken', data.token);
   return data;
 }
 
@@ -20,11 +21,15 @@ export async function guess(
   x: number,
   y: number
 ): Promise<Guess> {
+  if (!localStorage.getItem('gameToken')) {
+    throw new Error('Game not started');
+  }
   const response = await fetch(`${API_URL}/game/guess/${photoId}`, {
     method: 'POST',
     credentials: 'include',
     headers: {
       'Content-Type': 'application/json',
+      'Authorization': `Bearer ${localStorage.getItem('gameToken')}`,
     },
     body: JSON.stringify({
       name,

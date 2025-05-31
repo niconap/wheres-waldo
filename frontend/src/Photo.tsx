@@ -16,16 +16,16 @@ function Photo() {
   const [gameData, setGameData] = useState<Game | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [showFloater, setShowFloater] = useState<boolean>(false);
-  const [time, setTime] = useState<string>("0:00");
+  const [time, setTime] = useState<string>('0:00');
   const [coords, setCoords] = useState<{ x: number; y: number } | null>(null);
 
-  const passGuess = (name: string) => {
+  const passGuess = async (name: string) => {
     console.log(name);
     if (coords) {
-      let data = guess(Number(photoId), name, coords?.x, coords?.y);
+      let data = await guess(Number(photoId), name, coords?.x, coords?.y);
       console.log(data);
     }
-  }
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -56,22 +56,21 @@ function Photo() {
   useEffect(() => {
     let count = 0;
     setInterval(() => {
-        count += 1;
-        let seconds = count % 60;
-        let minutes = (count - seconds) / 60;
-        if (seconds < 10) {
-            setTime(`${minutes}:0${seconds}`)
-        } else {
-            setTime(`${minutes}:${seconds}`)
-        }
-    }, 1000)
-  }, [gameData])
+      count += 1;
+      let seconds = count % 60;
+      let minutes = (count - seconds) / 60;
+      if (seconds < 10) {
+        setTime(`${minutes}:0${seconds}`);
+      } else {
+        setTime(`${minutes}:${seconds}`);
+      }
+    }, 1000);
+  }, [gameData]);
 
   const handleClick = async (e: React.MouseEvent<HTMLImageElement>) => {
     const rect = e.currentTarget.getBoundingClientRect();
     const x = ((e.clientX - rect.left) / rect.width) * 100;
     const y = ((e.clientY - rect.top) / rect.height) * 100;
-    console.log(gameData);
     setCoords({ x, y });
     setShowFloater(true);
   };
