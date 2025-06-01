@@ -27,4 +27,5 @@ export type Guess = {
     notFound: number[];
   };
   score: number | null;
-}
+  token: string;
+};

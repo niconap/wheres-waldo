@@ -1,5 +1,5 @@
 import { useParams } from 'react-router-dom';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 import { Photo as PhotoType, Game } from './utils/types';
 import { fetchPhoto } from './utils/photos';
@@ -11,19 +11,22 @@ import Floater from './Floater.tsx';
 
 function Photo() {
   const { photoId } = useParams<{ photoId: string }>();
+  const intervalId = useRef<number | null>(null);
 
   const [photo, setPhoto] = useState<PhotoType | null>(null);
   const [gameData, setGameData] = useState<Game | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [showFloater, setShowFloater] = useState<boolean>(false);
   const [time, setTime] = useState<string>('0:00');
+  const [started, setStarted] = useState<boolean>(false);
   const [coords, setCoords] = useState<{ x: number; y: number } | null>(null);
 
   const passGuess = async (name: string) => {
-    console.log(name);
     if (coords) {
       let data = await guess(Number(photoId), name, coords?.x, coords?.y);
-      console.log(data);
+      if (data.status.notFound.length === 0 && intervalId.current) {
+        clearInterval(intervalId.current);
+      }
     }
   };
 
@@ -44,9 +47,9 @@ function Photo() {
         if (photoId) {
           const gameData = await startGame(photoId);
           setGameData(gameData);
+          setStarted(true);
         }
       } catch (error) {
-        console.error('Error starting game:', error);
         setError('Failed to start game');
       }
     };
@@ -54,18 +57,21 @@ function Photo() {
   }, [photoId]);
 
   useEffect(() => {
-    let count = 0;
-    setInterval(() => {
-      count += 1;
-      let seconds = count % 60;
-      let minutes = (count - seconds) / 60;
-      if (seconds < 10) {
-        setTime(`${minutes}:0${seconds}`);
-      } else {
-        setTime(`${minutes}:${seconds}`);
-      }
-    }, 1000);
-  }, [gameData]);
+    if (started) {
+      let count = 0;
+      let id = setInterval(() => {
+        count += 1;
+        let seconds = count % 60;
+        let minutes = (count - seconds) / 60;
+        if (seconds < 10) {
+          setTime(`${minutes}:0${seconds}`);
+        } else {
+          setTime(`${minutes}:${seconds}`);
+        }
+      }, 1000);
+      intervalId.current = id;
+    }
+  }, [started]);
 
   const handleClick = async (e: React.MouseEvent<HTMLImageElement>) => {
     const rect = e.currentTarget.getBoundingClientRect();

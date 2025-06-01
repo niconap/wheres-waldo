@@ -29,7 +29,7 @@ export async function guess(
     credentials: 'include',
     headers: {
       'Content-Type': 'application/json',
-      'Authorization': `Bearer ${localStorage.getItem('gameToken')}`,
+      Authorization: `Bearer ${localStorage.getItem('gameToken')}`,
     },
     body: JSON.stringify({
       name,
@@ -41,5 +41,6 @@ export async function guess(
     throw new Error('Failed to guess character');
   }
   const data = await response.json();
+  localStorage.setItem('gameToken', data.token);
   return data;
 }
