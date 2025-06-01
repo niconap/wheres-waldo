@@ -5,7 +5,6 @@ import { Photo as PhotoType, Game } from './utils/types';
 import { fetchPhoto } from './utils/photos';
 import { startGame } from './utils/game.ts';
 import { guess } from './utils/game.ts';
-import Nav from './Nav.tsx';
 import './css/Photo.css';
 import Floater from './Floater.tsx';
 
@@ -83,7 +82,6 @@ function Photo() {
 
   return (
     <>
-      <Nav />
       <main>
         {error && <div className="error">Error: {error}</div>}
         {!photo && !error && <div>Loading...</div>}

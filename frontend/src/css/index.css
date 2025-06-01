@@ -198,10 +198,18 @@ body {
   font-family: 'source_sans_proregular', sans-serif;
   color: var(--text-color);
   background-color: var(--background-color);
+  height: 100%;
+}
+
+#root {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
 }
 
 main {
   margin: 1em auto;
+  flex: 1;
 }
 
 a {
@@ -216,8 +224,10 @@ a:hover {
 }
 
 button {
+  display: flex;
+  align-items: center;
   color: #fcfcfc;
-  padding: 0.2rem 1rem;
+  padding: 0.2rem;
   font-weight: 600;
   background-color: var(--button-color);
   border: none;

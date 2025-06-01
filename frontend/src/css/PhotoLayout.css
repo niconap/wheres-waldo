@@ -29,3 +29,22 @@
   margin: 1em 0;
   border-radius: 10px;
 }
+
+#photo-layout div {
+  display: flex;
+  justify-content: center;
+}
+
+#photo-layout button {
+  padding: 1rem;
+}
+
+#photo-layout span {
+  margin-left: 0.5em;
+}
+
+#photo-layout h2 {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

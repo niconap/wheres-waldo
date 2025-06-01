@@ -1,0 +1,20 @@
+footer {
+  background-color: var(--shadow-color);
+  border-top: 2px solid var(--border-color);
+  box-shadow: 0 0 10px var(--shadow-color);
+  padding: 1rem;
+  text-align: left;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.75em;
+}
+
+footer button {
+  width: 2rem;
+  height: 2rem;
+  font-size: 1.5em;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

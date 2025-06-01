@@ -35,14 +35,20 @@ function PhotoLayout() {
     <div id="photo-layout">
       {photos.map((photo) => (
         <article key={photo.id} className="photo">
-          <h2>{photo.title}</h2>
+          <h2>
+            <ion-icon name="image-outline"></ion-icon>
+            <span>{photo.title}</span>
+          </h2>
           <img src={photo.path} alt={photo.title} />
-          <button
-            aria-label="View photo"
-            onClick={() => navigate(`/photo/${photo.id}`)}
-          >
-            Play
-          </button>
+          <div>
+            <button
+              aria-label="Play"
+              onClick={() => navigate(`/photo/${photo.id}`)}
+            >
+              <ion-icon name="play-outline"></ion-icon>
+              <span>Play</span>
+            </button>
+          </div>
         </article>
       ))}
     </div>

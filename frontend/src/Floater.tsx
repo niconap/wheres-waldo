@@ -22,7 +22,7 @@ function Floater({ coords, dismount, characterMap, passGuess }: FloaterProps) {
                     aria-label="Close Floater"
                     onClick={dismount}
                 >
-                    x
+                    <ion-icon name="close-outline"></ion-icon>
                 </button>
             </div>
             <div id="floater-content">
