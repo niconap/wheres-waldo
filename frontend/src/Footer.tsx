@@ -24,14 +24,23 @@ function Footer() {
       <div>
         <p>This project is made for educational purposes only</p>
         <p>
-          Made by{' '}
-          <a href="https://niconap.dev" target="_blank">
-            Nico Nap
+          <a
+            className="external-link"
+            href="https://niconap.dev"
+            target="_blank"
+          >
+            <span>Made by Nico</span>
+            <ion-icon name="exit-outline"></ion-icon>
           </a>
         </p>
         <p>
-          <a href="https://www.github.com/niconap/wheres-waldo" target="_blank">
-            View on GitHub
+          <a
+            className="external-link"
+            href="https://www.github.com/niconap/wheres-waldo"
+            target="_blank"
+          >
+            <span>View on GitHub</span>
+            <ion-icon name="exit-outline"></ion-icon>
           </a>
         </p>
       </div>

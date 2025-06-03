@@ -201,6 +201,23 @@ body {
   height: 100%;
 }
 
+.blur {
+  filter: blur(10px);
+}
+
+.error-input {
+  border-color: rgb(255, 97, 97);
+  background-color: rgb(255, 224, 224);
+}
+
+.error-input:hover {
+  background-color: rgb(255, 212, 212);
+}
+
+.error-msg {
+  color: rgb(255, 97, 97);
+}
+
 #root {
   display: flex;
   flex-direction: column;
@@ -212,13 +229,18 @@ main {
   flex: 1;
 }
 
-a {
-  color: var(--text-color);
-  text-decoration: none;
-  transition: color 0.2s ease-in-out;
+a h1 {
+  color: var(--text-color)
 }
 
-a:hover {
+a {
+  color: var(--button-color);
+  text-decoration: none;
+  transition: color 0.2s ease-in-out;
+  width: fit-content;
+}
+
+a:hover, a h1:hover {
   color: var(--button-color);
   text-decoration: underline;
 }
@@ -245,4 +267,32 @@ button:hover {
 button:focus {
   outline: none;
   box-shadow: 0 0 0 3px var(--focus-color);
+}
+
+input {
+  background-color: var(--background-color);
+  color: var(--text-color);
+  border: 2px solid var(--border-color);
+  border-radius: 5px;
+  transition: background-color 0.2s ease-in-out, border-color 0.2s ease-in-out,
+    box-shadow 0.2s ease-in-out;
+}
+
+input:hover {
+  outline: none;
+  background-color: var(--background-light);
+}
+
+input:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px var(--focus-color);
+}
+
+.external-link {
+  display: flex;
+  align-items: center;
+}
+
+.external-link span {
+  margin-right: 0.25em;
 }

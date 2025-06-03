@@ -7,6 +7,8 @@ import App from './App.tsx';
 import Photo from './Photo.tsx';
 import Footer from './Footer.tsx';
 import Nav from './Nav.tsx';
+import Leaderboard from './Leaderboard.tsx';
+import NotFound from './NotFound.tsx';
 const Layout = () => (
   <>
     <Nav />
@@ -22,7 +24,9 @@ const router = createBrowserRouter([
     children: [
       { path: '/', element: <App /> },
       { path: '/photo/:photoId', element: <Photo /> },
+      { path: '/leaderboards', element: <Leaderboard /> },
     ],
+    errorElement: <NotFound />,
   },
 ]);
 

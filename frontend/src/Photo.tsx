@@ -7,6 +7,7 @@ import { startGame } from './utils/game.ts';
 import { guess } from './utils/game.ts';
 import './css/Photo.css';
 import Floater from './Floater.tsx';
+import Finished from './Finished.tsx';
 
 function Photo() {
   const { photoId } = useParams<{ photoId: string }>();
@@ -18,12 +19,18 @@ function Photo() {
   const [showFloater, setShowFloater] = useState<boolean>(false);
   const [time, setTime] = useState<string>('0:00');
   const [started, setStarted] = useState<boolean>(false);
+  const [finished, setFinished] = useState<boolean>(false);
+  const [score, setScore] = useState<number>(0);
   const [coords, setCoords] = useState<{ x: number; y: number } | null>(null);
 
   const passGuess = async (name: string) => {
     if (coords) {
       let data = await guess(Number(photoId), name, coords?.x, coords?.y);
       if (data.status.notFound.length === 0 && intervalId.current) {
+        setFinished(true);
+        if (data.score) {
+          setScore(data.score);
+        }
         clearInterval(intervalId.current);
       }
     }
@@ -86,11 +93,11 @@ function Photo() {
         {error && <div className="error">Error: {error}</div>}
         {!photo && !error && <div>Loading...</div>}
         {photo && (
-          <div id="photo">
+          <div className={finished ? 'blur' : ''} id="photo">
             <h1>{photo.title}</h1>
             <h3>{time}</h3>
             <img onClick={handleClick} src={photo.path} alt={photo.title} />
-            {showFloater && (
+            {showFloater && !finished && (
               <Floater
                 characterMap={gameData?.characterMap || {}}
                 coords={coords}
@@ -100,6 +107,7 @@ function Photo() {
             )}
           </div>
         )}
+        {finished && <Finished score={score} />}
       </main>
     </>
   );
