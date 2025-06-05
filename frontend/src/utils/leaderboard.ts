@@ -31,6 +31,5 @@ export async function fetchLeaderboard(id: number): Promise<Leaderboard> {
     throw new Error('Failed to get leaderboard');
   }
   const leaderboard = await response.json();
-  console.log(leaderboard);
   return leaderboard;
 }

@@ -6,6 +6,7 @@ function Floater({
   location,
   characterMap,
   passGuess,
+  notFound,
 }: FloaterProps) {
   const style = location
     ? {
@@ -14,14 +15,17 @@ function Floater({
             ? 0.85 * window.innerWidth
             : location.x
         }px`,
-        top: `${location.y > 0.60 * window.innerHeight
-            ? 0.60 * window.innerHeight
-            : location.y}px`,
+        top: `${
+          location.y > 0.6 * window.innerHeight
+            ? 0.6 * window.innerHeight
+            : location.y
+        }px`,
       }
     : { top: 0 };
 
   const handleClick = (name: string) => {
     passGuess(name);
+    dismount();
   };
 
   return (
@@ -38,17 +42,21 @@ function Floater({
       </div>
       <div id="floater-content">
         <ol>
-          {Object.entries(characterMap ?? {}).map(([id, name]) => (
-            <li key={id}>
-              <img
-                className="character-icon"
-                src={`/${name.toLowerCase()}.png`}
-              />
-              <div>
-                <button onClick={() => handleClick(name)}>{name}</button>
-              </div>
-            </li>
-          ))}
+          {Object.entries(characterMap ?? {}).map(([id, name]) => {
+            if (notFound.includes(Number(id))) {
+              return (
+                <li key={id}>
+                  <img
+                    className="character-icon"
+                    src={`/${name.toLowerCase()}.png`}
+                  />
+                  <div>
+                    <button onClick={() => handleClick(name)}>{name}</button>
+                  </div>
+                </li>
+              );
+            }
+          })}
         </ol>
       </div>
     </div>

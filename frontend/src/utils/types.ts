@@ -16,7 +16,8 @@ export type Game = {
 
 export type FloaterProps = {
   location?: { x: number; y: number } | null;
-  dismount?: () => void;
+  dismount: () => void;
+  notFound: number[];
   passGuess: (name: string) => void;
   characterMap?: Record<number, string>;
 };

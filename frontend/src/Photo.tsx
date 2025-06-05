@@ -21,6 +21,7 @@ function Photo() {
   const [started, setStarted] = useState<boolean>(false);
   const [finished, setFinished] = useState<boolean>(false);
   const [score, setScore] = useState<number>(0);
+  const [notFound, setNotFound] = useState<number[]>([]);
   const [coords, setCoords] = useState<{ x: number; y: number } | null>(null);
   const [location, setLocation] = useState<{ x: number; y: number } | null>(
     null
@@ -29,6 +30,7 @@ function Photo() {
   const passGuess = async (name: string) => {
     if (coords) {
       let data = await guess(Number(photoId), name, coords?.x, coords?.y);
+      setNotFound(data.status.notFound);
       if (data.status.notFound.length === 0 && intervalId.current) {
         setFinished(true);
         if (data.score) {
@@ -56,6 +58,7 @@ function Photo() {
         if (photoId) {
           const gameData = await startGame(photoId);
           setGameData(gameData);
+          setNotFound(gameData.status.notFound);
           setStarted(true);
         }
       } catch (error) {
@@ -103,6 +106,7 @@ function Photo() {
             <img onClick={handleClick} src={photo.path} alt={photo.title} />
             {showFloater && !finished && (
               <Floater
+                notFound={notFound}
                 characterMap={gameData?.characterMap || {}}
                 location={location}
                 dismount={() => setShowFloater(false)}
