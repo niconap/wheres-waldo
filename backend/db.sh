@@ -77,4 +77,5 @@ fi
 
 printf "${BLUE}To stop the database container, run: docker stop $DB_CONTAINER_NAME${RESET}\n"
 printf "${BLUE}To remove the container, run: docker rm $DB_CONTAINER_NAME${RESET}\n"
-printf "${BLUE}To start the app, use npm run start${RESET}\n"
+# printf "${BLUE}To start the app, use npm run start${RESET}\n"
+npm run start

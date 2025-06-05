@@ -4,7 +4,12 @@ import { useNavigate } from 'react-router-dom';
 import { createEntry } from './utils/leaderboard';
 import './css/Finished.css';
 
-function Finished({ score }: { score: number }) {
+type FinishedProps = {
+  score: number;
+  photoId: number;
+};
+
+function Finished({ score, photoId }: FinishedProps) {
   const navigate = useNavigate();
   const [name, setName] = useState<string>('');
   const [error, setError] = useState<string>('');
@@ -24,7 +29,7 @@ function Finished({ score }: { score: number }) {
       return;
     }
     await createEntry(name);
-    navigate('/leaderboards');
+    navigate(`/leaderboards?id=${photoId}`);
   };
 
   return (
@@ -39,7 +44,11 @@ function Finished({ score }: { score: number }) {
         onChange={handleChange}
       />
       {error && <p className="error-msg">{error}</p>}
-      <button onClick={handleClick} name="Submit name" className='external-link'>
+      <button
+        onClick={handleClick}
+        name="Submit name"
+        className="external-link"
+      >
         <span>Submit</span>
         <ion-icon name="exit-outline"></ion-icon>
       </button>

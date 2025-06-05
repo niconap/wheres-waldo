@@ -1,0 +1,30 @@
+#leaderboard {
+  border: 3px solid var(--border-color);
+  border-radius: 10px;
+  box-shadow: 0 2px 4px var(--shadow-color);
+  background-color: var(--background-color);
+  padding: 1rem;
+  transition: background-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+  margin-top: 1rem;
+  padding-inline-start: 0px;
+  min-width: 50vw;
+}
+
+#leaderboard ol li div {
+  padding: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+#leaderboard ol li {
+  transition: background-color 0.2s ease;
+}
+
+#leaderboard ol li:not(:last-child) {
+  border-bottom: 1px solid var(--border-color);
+}
+
+#leaderboard ol li:hover {
+  background-color: var(--shadow-color);
+}

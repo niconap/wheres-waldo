@@ -14,7 +14,7 @@
   "devDependencies": {
     "jest": "^29.7.0",
     "jest-mock-extended": "^4.0.0-beta1",
-    "prisma": "^6.8.2",
+    "prisma": "^6.9.0",
     "supertest": "^7.1.0"
   },
   "dependencies": {

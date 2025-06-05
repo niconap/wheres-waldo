@@ -28,9 +28,12 @@ function createLeaderboardRouter(database) {
       res.status(400).send({ error: 'ID must be a valid number' });
       return;
     }
-    const leaderboard = await database.getLeaderBoard(id);
+    let leaderboard = await database.getLeaderBoard(id);
 
     if (leaderboard) {
+      leaderboard.Entry = leaderboard.Entry.sort((a, b) => {
+        return a.score - b.score;
+      });
       res.send(leaderboard);
     } else {
       res.sendStatus(404);

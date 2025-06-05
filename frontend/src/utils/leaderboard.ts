@@ -1,3 +1,5 @@
+import { Leaderboard } from './types';
+
 const API_URL = import.meta.env.VITE_API_URL;
 
 export async function createEntry(name: string): Promise<{ score: number }> {
@@ -19,4 +21,16 @@ export async function createEntry(name: string): Promise<{ score: number }> {
   }
   const data = await response.json();
   return data;
+}
+
+export async function fetchLeaderboard(id: number): Promise<Leaderboard> {
+  const response = await fetch(`${API_URL}/leaderboard/${id}`, {
+    method: 'GET',
+  });
+  if (!response.ok) {
+    throw new Error('Failed to get leaderboard');
+  }
+  const leaderboard = await response.json();
+  console.log(leaderboard);
+  return leaderboard;
 }

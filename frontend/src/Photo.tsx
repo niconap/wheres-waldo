@@ -111,7 +111,7 @@ function Photo() {
             )}
           </div>
         )}
-        {finished && <Finished score={score} />}
+        {finished && <Finished photoId={Number(photoId)} score={score} />}
       </main>
     </>
   );

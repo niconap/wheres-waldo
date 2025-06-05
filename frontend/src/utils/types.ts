@@ -29,3 +29,16 @@ export type Guess = {
   score: number | null;
   token: string;
 };
+
+type Entry = {
+  id: number;
+  leaderboardId: number;
+  name: string;
+  score: number;
+};
+
+export type Leaderboard = {
+  id: number;
+  photoId: number;
+  Entry: Entry[];
+};

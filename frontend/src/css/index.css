@@ -287,7 +287,7 @@ button:focus {
   box-shadow: 0 0 0 3px var(--focus-color);
 }
 
-input {
+input, select {
   background-color: var(--background-color);
   color: var(--text-color);
   border: 2px solid var(--border-color);
@@ -296,12 +296,16 @@ input {
     box-shadow 0.2s ease-in-out;
 }
 
-input:hover {
+input:hover, select:hover {
   outline: none;
   background-color: var(--background-light);
 }
 
-input:focus {
+select:hover {
+  cursor: pointer;
+}
+
+input:focus, select:focus {
   outline: none;
   box-shadow: 0 0 0 3px var(--focus-color);
 }
