@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams, useNavigate } from 'react-router-dom';
 
 import { Leaderboard as LeaderboardType, Photo } from './utils/types';
 import { fetchPhotos } from './utils/photos';
@@ -14,6 +14,7 @@ function Leaderboard() {
   const [choice, setChoice] = useState<number>(0);
   const [searchParams, _] = useSearchParams();
   const id = Number(searchParams.get('id'));
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -74,13 +75,22 @@ function Leaderboard() {
       </select>
       {leaderboard && (
         <div id="leaderboard">
+          <div>
+            <button
+              aria-label="Play"
+              onClick={() => navigate(`/photo/${choice}`)}
+            >
+              <ion-icon name="play-outline"></ion-icon>
+              <span>Try this level</span>
+            </button>
+          </div>
           <ol>
             {leaderboard.Entry.map((entry) => {
               return (
                 <li className="leaderboard-entry">
                   <div>
-                  <h3>{entry.name}</h3>
-                  <p>{entry.score / 1000} seconds</p>
+                    <h3>{entry.name}</h3>
+                    <p>{entry.score / 1000} seconds</p>
                   </div>
                 </li>
               );

@@ -6,8 +6,11 @@
   padding: 1rem;
   transition: background-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
   margin-top: 1rem;
-  padding-inline-start: 0px;
   min-width: 50vw;
+}
+
+#leaderboard button {
+  margin: 0 auto 1rem auto;
 }
 
 #leaderboard ol li div {
