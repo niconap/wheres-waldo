@@ -5,7 +5,6 @@ const API_URL = import.meta.env.VITE_API_URL;
 export async function startGame(photoId: string): Promise<Game> {
   const response = await fetch(`${API_URL}/game/start/${photoId}`, {
     method: 'POST',
-    credentials: 'include',
   });
   if (!response.ok) {
     throw new Error('Failed to start game');
@@ -26,7 +25,6 @@ export async function guess(
   }
   const response = await fetch(`${API_URL}/game/guess/${photoId}`, {
     method: 'POST',
-    credentials: 'include',
     headers: {
       'Content-Type': 'application/json',
       Authorization: `Bearer ${localStorage.getItem('gameToken')}`,
