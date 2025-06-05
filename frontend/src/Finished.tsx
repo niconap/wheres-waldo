@@ -39,8 +39,9 @@ function Finished({ score }: { score: number }) {
         onChange={handleChange}
       />
       {error && <p className="error-msg">{error}</p>}
-      <button onClick={handleClick} name="Submit name">
-        Submit
+      <button onClick={handleClick} name="Submit name" className='external-link'>
+        <span>Submit</span>
+        <ion-icon name="exit-outline"></ion-icon>
       </button>
     </div>
   );

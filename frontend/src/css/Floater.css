@@ -1,12 +1,11 @@
 #floater-menu {
-  position: absolute;
+  position: fixed;
   width: 15rem;
   height: auto;
   padding: 1em;
   background-color: var(--background-color);
   color: var(--text-color);
   border-radius: 8px;
-  transform: translate(10%, 100%);
   box-shadow: 0 4px 8px var(--shadow-color);
   z-index: 1000;
 }
@@ -15,4 +14,26 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+}
+
+.character-icon {
+  display: inline-block;
+  height: 3em;
+  margin-right: 1rem;
+}
+
+#floater-content ol {
+  list-style: none;
+  padding: 0;
+}
+
+#floater-content li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 0;
+}
+
+#floater-content li:not(:last-child) {
+  border-bottom: 1px solid var(--border-color);
 }

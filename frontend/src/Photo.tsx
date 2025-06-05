@@ -22,6 +22,9 @@ function Photo() {
   const [finished, setFinished] = useState<boolean>(false);
   const [score, setScore] = useState<number>(0);
   const [coords, setCoords] = useState<{ x: number; y: number } | null>(null);
+  const [location, setLocation] = useState<{ x: number; y: number } | null>(
+    null
+  );
 
   const passGuess = async (name: string) => {
     if (coords) {
@@ -84,6 +87,7 @@ function Photo() {
     const x = ((e.clientX - rect.left) / rect.width) * 100;
     const y = ((e.clientY - rect.top) / rect.height) * 100;
     setCoords({ x, y });
+    setLocation({ x: e.clientX, y: e.clientY });
     setShowFloater(true);
   };
 
@@ -100,7 +104,7 @@ function Photo() {
             {showFloater && !finished && (
               <Floater
                 characterMap={gameData?.characterMap || {}}
-                coords={coords}
+                location={location}
                 dismount={() => setShowFloater(false)}
                 passGuess={passGuess}
               />

@@ -35,12 +35,8 @@
   justify-content: center;
 }
 
-#photo-layout button {
-  padding: 1rem;
-}
-
 #photo-layout span {
-  margin-left: 0.5em;
+  margin-left: 0.25em;
 }
 
 #photo-layout h2 {

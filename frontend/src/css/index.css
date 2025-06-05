@@ -176,6 +176,7 @@ h6 {
   --button-color: #6ba4ff;
   --button-hover-color: #357ae8;
   --button-border-color: #4285f4;
+  --blur-color: #ffffffb3
 }
 
 .dark-mode {
@@ -188,6 +189,7 @@ h6 {
   --button-color: #00adb5;
   --button-hover-color: #0097a7;
   --button-border-color: #006d73;
+  --blur-color: #000000b3
 }
 
 .hide {
@@ -202,7 +204,23 @@ body {
 }
 
 .blur {
-  filter: blur(10px);
+  position: relative;
+}
+
+@supports (filter: blur(10px)) {
+  .blur {
+    filter: blur(10px);
+  }
+}
+
+@supports not (filter: blur(10px)) {
+  .blur::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: var(--blur-color);
+    pointer-events: none;
+  }
 }
 
 .error-input {
@@ -249,7 +267,7 @@ button {
   display: flex;
   align-items: center;
   color: #fcfcfc;
-  padding: 0.2rem;
+  padding: 0.25rem;
   font-weight: 600;
   background-color: var(--button-color);
   border: none;
