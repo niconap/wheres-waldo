@@ -19,12 +19,14 @@ test('renders character names from characterMap', () => {
   render(
     <Floater
       dismount={() => {}}
-      notFound={[]}
+      notFound={[1, 2, 3]}
       passGuess={() => {}}
       characterMap={characterMap}
     />
   );
-  expect(screen.getByText('Waldo')).toBeInTheDocument();
-  expect(screen.getByText('Odlaw')).toBeInTheDocument();
-  expect(screen.getByText('Wizard Whitebeard')).toBeInTheDocument();
+  expect(screen.getByRole('button', { name: 'Waldo' })).toBeInTheDocument();
+  expect(screen.getByRole('button', { name: 'Odlaw' })).toBeInTheDocument();
+  expect(
+    screen.getByRole('button', { name: 'Wizard Whitebeard' })
+  ).toBeInTheDocument();
 });

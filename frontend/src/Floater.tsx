@@ -51,7 +51,7 @@ function Floater({
                     src={`/${name.toLowerCase()}.png`}
                   />
                   <div>
-                    <button onClick={() => handleClick(name)}>{name}</button>
+                    <button name={name} onClick={() => handleClick(name)}>{name}</button>
                   </div>
                 </li>
               );

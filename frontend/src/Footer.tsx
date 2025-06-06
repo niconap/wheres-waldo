@@ -26,6 +26,7 @@ function Footer() {
         <p>
           <a
             className="external-link"
+            aria-label='Portfolio website'
             href="https://niconap.dev"
             target="_blank"
           >
@@ -36,6 +37,7 @@ function Footer() {
         <p>
           <a
             className="external-link"
+            aria-label='GitHub repository'
             href="https://www.github.com/niconap/wheres-waldo"
             target="_blank"
           >

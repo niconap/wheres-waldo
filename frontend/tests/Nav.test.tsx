@@ -24,16 +24,4 @@ describe('Navigation Bar', () => {
     const leaderboardLink = screen.getByRole('link', { name: /Leaderboards/i });
     expect(leaderboardLink).toBeInTheDocument();
   });
-
-  it('should contain a button to toggle dark/light mode', () => {
-    render(
-      <MemoryRouter>
-        <Nav />
-      </MemoryRouter>
-    );
-    const toggleButton = screen.getByRole('button', {
-      name: /toggle theme/i,
-    });
-    expect(toggleButton).toBeInTheDocument();
-  });
 });

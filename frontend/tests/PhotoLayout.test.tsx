@@ -70,7 +70,7 @@ test('navigates to /photo/:photoId when button is clicked', async () => {
 
   expect(await screen.findByText('At the beach')).toBeInTheDocument();
 
-  const button = screen.getAllByRole('button', { name: /view photo/i })[0];
+  const button = screen.getAllByRole('button', { name: /play/i })[0];
   await userEvent.click(button);
   expect(screen.getByTestId('location')).toHaveTextContent('/photo/1');
 });

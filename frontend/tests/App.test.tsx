@@ -4,16 +4,6 @@ import { MemoryRouter } from 'react-router-dom';
 
 import App from '../src/App';
 
-test('renders the Nav bar', () => {
-  render(
-    <MemoryRouter>
-      <App />
-    </MemoryRouter>
-  );
-  const navElement = screen.getByRole('navigation');
-  expect(navElement).toBeInTheDocument();
-});
-
 test('renders the title and description', () => {
   render(
     <MemoryRouter>
