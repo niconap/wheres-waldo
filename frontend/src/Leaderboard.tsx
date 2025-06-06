@@ -7,7 +7,7 @@ import { fetchLeaderboard } from './utils/leaderboard';
 import './css/Leaderboard.css';
 
 function Leaderboard() {
-  const [photos, setPhotos] = useState<Photo[] | null>(null);
+  const [photos, setPhotos] = useState<Photo[]>([]);
   const [leaderboard, setLeaderboard] = useState<LeaderboardType | null>(null);
   const [error, setError] = useState<string>('');
   const [loaded, setLoaded] = useState<boolean>(false);
@@ -20,7 +20,6 @@ function Leaderboard() {
     const fetchData = async () => {
       try {
         const photos = await fetchPhotos();
-        setPhotos(photos);
         if (photos.length > 0) {
           if (id) {
             setChoice(id);
@@ -28,7 +27,7 @@ function Leaderboard() {
             setChoice(photos[0].id);
           }
         }
-        setLoaded(true);
+        setPhotos(photos);
       } catch {
         setError('Failed to load photos');
       }
@@ -43,11 +42,12 @@ function Leaderboard() {
       try {
         const leaderboard = await fetchLeaderboard(choice);
         setLeaderboard(leaderboard);
+        setLoaded(true);
       } catch {
         setError('Failed to fetch leaderboard');
       }
     };
-    if (loaded) {
+    if (photos.length > 0) {
       fetchData();
     }
   }, [choice, loaded]);
@@ -60,7 +60,8 @@ function Leaderboard() {
     <main>
       <h1>Leaderboards</h1>
       <p className="error-msg">{error}</p>
-      <select
+      {!loaded && <p>Loading...</p>}
+      {photos.length > 0 && (<select
         value={choice}
         onChange={handleSelect}
         aria-label="Select a photo"
@@ -72,7 +73,7 @@ function Leaderboard() {
             </option>
           );
         })}
-      </select>
+      </select>)}
       {leaderboard && (
         <div id="leaderboard">
           <div>
@@ -84,7 +85,7 @@ function Leaderboard() {
               <span>Try this level</span>
             </button>
           </div>
-          <ol>
+          {leaderboard.Entry.length > 0 && (<ol>
             {leaderboard.Entry.map((entry) => {
               return (
                 <li className="leaderboard-entry">
@@ -95,7 +96,10 @@ function Leaderboard() {
                 </li>
               );
             })}
-          </ol>
+          </ol>)}
+          {leaderboard.Entry.length === 0 && (
+            <p>Leaderboard is empty, be the first one by completing the level!</p>
+          )}
         </div>
       )}
     </main>
