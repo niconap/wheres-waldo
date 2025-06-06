@@ -40,10 +40,3 @@ model Character {
     photo   Photo  @relation(fields: [photoId], references: [id])
     name    String
 }
-
-model Session {
-    id        String   @id
-    sid       String   @unique
-    data      String   @db.Text
-    expiresAt DateTime
-}

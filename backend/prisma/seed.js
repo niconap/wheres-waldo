@@ -2,51 +2,25 @@ const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 
 async function main() {
+  await prisma.entry.deleteMany();
+  await prisma.leaderboard.deleteMany();
+  await prisma.character.deleteMany();
+  await prisma.photo.deleteMany();
+
   const photo1 = await prisma.photo.create({
     data: {
       path: '/beach.jpg',
       title: 'At the beach',
       Leaderboard: {
-        create: {
-          Entry: {
-            create: {
-              name: 'John Doe',
-              score: 100,
-            },
-          },
-        },
+        create: {},
       },
       Character: {
         createMany: {
           data: [
-            {
-              name: 'Waldo',
-              x1: 60,
-              y1: 36,
-              x2: 62,
-              y2: 42,
-            },
-            {
-              name: 'Odlaw',
-              x1: 8,
-              y1: 34,
-              x2: 10,
-              y2: 41,
-            },
-            {
-              name: 'Wizard',
-              x1: 25,
-              y1: 34,
-              x2: 27,
-              y2: 39,
-            },
-            {
-              name: 'Wenda',
-              x1: 75,
-              y1: 40,
-              x2: 78,
-              y2: 44,
-            },
+            { name: 'Waldo', x1: 60, y1: 36, x2: 62, y2: 42 },
+            { name: 'Odlaw', x1: 8, y1: 34, x2: 10, y2: 41 },
+            { name: 'Wizard', x1: 25, y1: 34, x2: 27, y2: 39 },
+            { name: 'Wenda', x1: 75, y1: 40, x2: 78, y2: 44 },
           ],
         },
       },
@@ -58,26 +32,11 @@ async function main() {
       path: '/castle.jpg',
       title: 'At the castle',
       Leaderboard: {
-        create: {
-          Entry: {
-            create: {
-              name: 'Jane Smith',
-              score: 200,
-            },
-          },
-        },
+        create: {},
       },
       Character: {
         createMany: {
-          data: [
-            {
-              name: 'Waldo',
-              x1: 0,
-              y1: 0,
-              x2: 100,
-              y2: 100,
-            },
-          ],
+          data: [{ name: 'Waldo', x1: 15, y1: 80, x2: 20, y2: 90 }],
         },
       },
     },
