@@ -22,10 +22,10 @@ beforeEach(async () => {
   mockDatabase.getCharacter.mockResolvedValue({
     id: 1,
     name: 'Waldo',
-    x1: 90,
-    y1: 190,
-    x2: 110,
-    y2: 210,
+    x1: 10,
+    y1: 20,
+    x2: 90,
+    y2: 80,
   });
 
   const response = await supertest(app).post('/game/start/1');
@@ -77,7 +77,7 @@ describe('POST /game/guess/:photoId', () => {
     const response = await supertest(app)
       .post('/game/guess/1')
       .set('Authorization', `Bearer ${token}`)
-      .send({ name: 'Waldo', x: 100, y: 200 });
+      .send({ name: 'Waldo', x: 15, y: 25 });
     expect(response.statusCode).toBe(200);
   });
 
@@ -85,7 +85,7 @@ describe('POST /game/guess/:photoId', () => {
     const response = await supertest(app)
       .post('/game/guess/abc')
       .set('Authorization', `Bearer ${token}`)
-      .send({ name: 'Waldo', x: 100, y: 200 });
+      .send({ name: 'Waldo', x: 15, y: 25 });
     expect(response.statusCode).toBe(400);
     expect(response.body.error).toEqual('Invalid ID format provided');
   });
@@ -95,7 +95,7 @@ describe('POST /game/guess/:photoId', () => {
     const response = await supertest(app)
       .post('/game/guess/1')
       .set('Authorization', `Bearer ${token}`)
-      .send({ name: 'Waldo', x: 100, y: 200 });
+      .send({ name: 'Waldo', x: 15, y: 25 });
     expect(response.statusCode).toBe(404);
   });
 
@@ -104,10 +104,10 @@ describe('POST /game/guess/:photoId', () => {
       .mockResolvedValueOnce({
         id: 1,
         name: 'Waldo',
-        x1: 90,
-        y1: 190,
-        x2: 110,
-        y2: 210,
+        x1: 10,
+        y1: 20,
+        x2: 90,
+        y2: 80,
       })
       .mockResolvedValueOnce({
         id: 2,
@@ -121,7 +121,7 @@ describe('POST /game/guess/:photoId', () => {
     const response = await supertest(app)
       .post('/game/guess/1')
       .set('Authorization', `Bearer ${token}`)
-      .send({ name: 'Waldo', x: 100, y: 200 });
+      .send({ name: 'Waldo', x: 15, y: 25 });
 
     expect(response.statusCode).toBe(200);
     expect(response.body.status).toEqual({
@@ -134,7 +134,7 @@ describe('POST /game/guess/:photoId', () => {
     const response = await supertest(app)
       .post('/game/guess/1')
       .set('Authorization', `Bearer ${token}`)
-      .send({ name: 'Waldo', x: 50, y: 50 });
+      .send({ name: 'Waldo', x: 5, y: 15 });
 
     expect(response.statusCode).toBe(200);
     expect(response.body.status).toEqual({
@@ -147,7 +147,7 @@ describe('POST /game/guess/:photoId', () => {
     const response = await supertest(app)
       .post('/game/guess/1')
       .set('Authorization', `Bearer ${token}`)
-      .send({ name: 'NotWaldo', x: 100, y: 200 });
+      .send({ name: 'NotWaldo', x: 10, y: 20 });
 
     expect(response.statusCode).toBe(200);
     expect(response.body.status).toEqual({
@@ -161,47 +161,47 @@ describe('POST /game/guess/:photoId', () => {
       .mockResolvedValueOnce({
         id: 1,
         name: 'Waldo',
-        x1: 90,
-        y1: 190,
-        x2: 110,
-        y2: 210,
+        x1: 10,
+        y1: 10,
+        x2: 30,
+        y2: 30,
       })
       .mockResolvedValueOnce({
         id: 2,
         name: 'Odlaw',
-        x1: 50,
-        y1: 50,
-        x2: 70,
-        y2: 70,
+        x1: 60,
+        y1: 60,
+        x2: 80,
+        y2: 80,
       })
       .mockResolvedValueOnce({
         id: 1,
         name: 'Waldo',
-        x1: 90,
-        y1: 190,
-        x2: 110,
-        y2: 210,
+        x1: 10,
+        y1: 10,
+        x2: 30,
+        y2: 30,
       })
       .mockResolvedValueOnce({
         id: 2,
         name: 'Odlaw',
-        x1: 50,
-        y1: 50,
-        x2: 70,
-        y2: 70,
+        x1: 60,
+        y1: 60,
+        x2: 80,
+        y2: 80,
       });
 
     let response = await supertest(app)
       .post('/game/guess/1')
       .set('Authorization', `Bearer ${token}`)
-      .send({ name: 'Waldo', x: 100, y: 200 });
+      .send({ name: 'Waldo', x: 20, y: 20 });
 
     const newToken = response.body.token;
 
     response = await supertest(app)
       .post('/game/guess/1')
       .set('Authorization', `Bearer ${newToken}`)
-      .send({ name: 'Odlaw', x: 60, y: 60 });
+      .send({ name: 'Odlaw', x: 70, y: 70 });
 
     expect(response.statusCode).toBe(200);
     expect(response.body.status).toEqual({

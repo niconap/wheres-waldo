@@ -1,4 +1,5 @@
 const express = require('express');
+const { body, validationResult } = require('express-validator');
 
 const { sign, authenticateJWT } = require('../utils/jwt.js');
 
@@ -58,60 +59,78 @@ function createGameRouter(database) {
     });
   });
 
-  router.post('/guess/:photoId', authenticateJWT, async (req, res) => {
-    if (isNaN(req.params.photoId) && isNaN(parseInt(req.params.photoId))) {
-      res.status(400).send({ error: 'Invalid ID format provided' });
-      return;
-    }
-
-    let gameState = req.user;
-
-    const id = Number(req.params.photoId);
-    const photo = await database.getPhoto(id);
-
-    if (!photo) {
-      res.sendStatus(404);
-      return;
-    }
-
-    let foundCharacter = null;
-    for (const element of photo.Character) {
-      const character = await database.getCharacter(element.id);
-      if (
-        character.name === req.body.name &&
-        req.body.x >= character.x1 &&
-        req.body.x <= character.x2 &&
-        req.body.y >= character.y1 &&
-        req.body.y <= character.y2
-      ) {
-        foundCharacter = character;
-        break;
+  router.post(
+    '/guess/:photoId',
+    authenticateJWT,
+    [
+      body('name').trim().isLength({ min: 3 }).escape(),
+      body('x')
+        .isFloat({ min: 0, max: 100 })
+        .withMessage('x must be a number between 0 and 100'),
+      body('y')
+        .isFloat({ min: 0, max: 100 })
+        .withMessage('x must be a number between 0 and 100'),
+    ],
+    async (req, res) => {
+      if (isNaN(req.params.photoId) && isNaN(parseInt(req.params.photoId))) {
+        res.status(400).send({ error: 'Invalid ID format provided' });
+        return;
       }
-    }
 
-    if (foundCharacter) {
-      if (!gameState.status.found.includes(foundCharacter.id)) {
-        gameState.status.found.push(foundCharacter.id);
-        gameState.status.notFound = gameState.status.notFound.filter(
-          (id) => id !== foundCharacter.id
-        );
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
       }
+
+      let gameState = req.user;
+
+      const id = Number(req.params.photoId);
+      const photo = await database.getPhoto(id);
+
+      if (!photo) {
+        res.sendStatus(404);
+        return;
+      }
+
+      let foundCharacter = null;
+      for (const element of photo.Character) {
+        const character = await database.getCharacter(element.id);
+        if (
+          character.name === req.body.name &&
+          req.body.x >= character.x1 &&
+          req.body.x <= character.x2 &&
+          req.body.y >= character.y1 &&
+          req.body.y <= character.y2
+        ) {
+          foundCharacter = character;
+          break;
+        }
+      }
+
+      if (foundCharacter) {
+        if (!gameState.status.found.includes(foundCharacter.id)) {
+          gameState.status.found.push(foundCharacter.id);
+          gameState.status.notFound = gameState.status.notFound.filter(
+            (id) => id !== foundCharacter.id
+          );
+        }
+      }
+
+      let score = null;
+      if (gameState.status.notFound.length === 0) {
+        score = Date.now() - gameState.start;
+        gameState.score = score;
+      }
+
+      const newToken = sign(gameState);
+
+      res.send({
+        status: gameState.status,
+        score,
+        token: newToken,
+      });
     }
-
-    let score = null;
-    if (gameState.status.notFound.length === 0) {
-      score = Date.now() - gameState.start;
-      gameState.score = score;
-    }
-
-    const newToken = sign(gameState);
-
-    res.send({
-      status: gameState.status,
-      score,
-      token: newToken,
-    });
-  });
+  );
 
   return router;
 }
