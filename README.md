@@ -1,7 +1,10 @@
 # Where's Waldo?
 
 This is the Where's Waldo project from The Odin Project's curriculum. The goal
-is to recreate the Where's Waldo game using HTML, CSS, and JavaScript.
+is to recreate the Where's Waldo game using HTML, CSS, and JavaScript. The live
+version of this project can be found [here](https://wheres-waldo.niconap.dev/).
+Please note that the API slumbers, so it will take some time to start up. If
+nothing loads, please try again about a minute or two later.
 
 ### Environment variables
 
