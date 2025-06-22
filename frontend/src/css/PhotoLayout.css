@@ -44,3 +44,14 @@
   justify-content: center;
   align-items: center;
 }
+
+@media (max-width: 850px) {
+  #photo-layout {
+    flex-direction: column;
+    padding: 1rem;
+  }
+
+  .photo {
+    max-width: 100%;
+  }
+}

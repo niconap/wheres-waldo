@@ -31,3 +31,9 @@
 #leaderboard ol li:hover {
   background-color: var(--shadow-color);
 }
+
+@media (max-width: 850px) {
+  #leaderboard {
+    width: 90vw;
+  }
+}
