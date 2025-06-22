@@ -39,7 +39,10 @@ function PhotoLayout() {
             <ion-icon name="image-outline"></ion-icon>
             <span>{photo.title}</span>
           </h2>
-          <img src={photo.path} alt={photo.title} />
+          <img
+            src={photo.path.replace(/\/([^/]+)/, '/thumbnail_$1')}
+            alt={photo.title}
+          />
           <div>
             <button
               aria-label="Play"
