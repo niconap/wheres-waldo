@@ -5,10 +5,13 @@ import { Photo as PhotoType, Game } from './utils/types';
 import { fetchPhoto } from './utils/photos';
 import { startGame } from './utils/game.ts';
 import { guess } from './utils/game.ts';
-import './css/Photo.css';
 import Floater from './Floater.tsx';
 import Finished from './Finished.tsx';
+import './css/Photo.css';
 
+/**
+ * Photo game component for playing Where's Waldo on a selected photo.
+ */
 function Photo() {
   const { photoId } = useParams<{ photoId: string }>();
   const intervalId = useRef<number | null>(null);
@@ -27,6 +30,11 @@ function Photo() {
     null
   );
 
+  /**
+   * Handles a guess attempt for a character at the selected coordinates.
+   *
+   * @param {string} name - The name of the character being guessed.
+   */
   const passGuess = async (name: string) => {
     if (coords) {
       let data = await guess(Number(photoId), name, coords?.x, coords?.y);
@@ -85,6 +93,11 @@ function Photo() {
     }
   }, [started]);
 
+  /**
+   * Handles click events on the photo image and sets normalized coordinates.
+   *
+   * @param {React.MouseEvent<HTMLImageElement>} e - The click event.
+   */
   const handleClick = async (e: React.MouseEvent<HTMLImageElement>) => {
     const rect = e.currentTarget.getBoundingClientRect();
     const x = ((e.clientX - rect.left) / rect.width) * 100;

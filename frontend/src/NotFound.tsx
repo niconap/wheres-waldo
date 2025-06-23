@@ -2,6 +2,9 @@ import { Link } from 'react-router-dom';
 import Nav from './Nav';
 import Footer from './Footer';
 
+/**
+ * 404 Not Found page with navigation and a link back to the home page.
+ */
 function NotFound() {
   return (
     <>

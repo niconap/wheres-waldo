@@ -9,6 +9,10 @@ import Footer from './Footer.tsx';
 import Nav from './Nav.tsx';
 import Leaderboard from './Leaderboard.tsx';
 import NotFound from './NotFound.tsx';
+
+/**
+ * The main layout component that includes navigation, outlet for routed content, and footer.
+ */
 const Layout = () => (
   <>
     <Nav />
@@ -30,6 +34,9 @@ const router = createBrowserRouter([
   },
 ]);
 
+/**
+ * Entry point for the React application. Sets up routing and renders the app.
+ */
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <RouterProvider router={router} />

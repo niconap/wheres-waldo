@@ -6,6 +6,9 @@ import { fetchPhotos } from './utils/photos';
 import { fetchLeaderboard } from './utils/leaderboard';
 import './css/Leaderboard.css';
 
+/**
+ * Leaderboard page displaying selectable photo leaderboards and their entries.
+ */
 function Leaderboard() {
   const [photos, setPhotos] = useState<Photo[]>([]);
   const [leaderboard, setLeaderboard] = useState<LeaderboardType | null>(null);
@@ -52,6 +55,12 @@ function Leaderboard() {
     }
   }, [choice, loaded]);
 
+  /**
+   * Handles selection change for the photo dropdown.
+   *
+   * @param {React.ChangeEvent<HTMLSelectElement>} e - The change event from the
+   * select element.
+   */
   const handleSelect = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setChoice(Number(e.target.value));
   };
@@ -61,19 +70,21 @@ function Leaderboard() {
       <h1>Leaderboards</h1>
       <p className="error-msg">{error}</p>
       {!loaded && <p>Loading...</p>}
-      {photos.length > 0 && (<select
-        value={choice}
-        onChange={handleSelect}
-        aria-label="Select a photo"
-      >
-        {photos?.map((photo) => {
-          return (
-            <option key={photo.id} value={photo.id}>
-              {photo.title}
-            </option>
-          );
-        })}
-      </select>)}
+      {photos.length > 0 && (
+        <select
+          value={choice}
+          onChange={handleSelect}
+          aria-label="Select a photo"
+        >
+          {photos?.map((photo) => {
+            return (
+              <option key={photo.id} value={photo.id}>
+                {photo.title}
+              </option>
+            );
+          })}
+        </select>
+      )}
       {leaderboard && (
         <div id="leaderboard">
           <div>
@@ -85,20 +96,24 @@ function Leaderboard() {
               <span>Try this level</span>
             </button>
           </div>
-          {leaderboard.Entry.length > 0 && (<ol>
-            {leaderboard.Entry.map((entry) => {
-              return (
-                <li className="leaderboard-entry">
-                  <div>
-                    <h3>{entry.name}</h3>
-                    <p>{entry.score / 1000} seconds</p>
-                  </div>
-                </li>
-              );
-            })}
-          </ol>)}
+          {leaderboard.Entry.length > 0 && (
+            <ol>
+              {leaderboard.Entry.map((entry) => {
+                return (
+                  <li className="leaderboard-entry">
+                    <div>
+                      <h3>{entry.name}</h3>
+                      <p>{entry.score / 1000} seconds</p>
+                    </div>
+                  </li>
+                );
+              })}
+            </ol>
+          )}
           {leaderboard.Entry.length === 0 && (
-            <p>Leaderboard is empty, be the first one by completing the level!</p>
+            <p>
+              Leaderboard is empty, be the first one by completing the level!
+            </p>
           )}
         </div>
       )}

@@ -1,6 +1,10 @@
 import './css/App.css';
 import PhotoLayout from './PhotoLayout';
 
+/**
+ * The component containing the homepage, rendering a title and the photo
+ * layout.
+ */
 function App() {
   return (
     <>

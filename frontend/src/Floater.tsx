@@ -1,6 +1,22 @@
-import { FloaterProps } from './utils/types';
 import './css/Floater.css';
+import { FloaterProps } from './utils/types';
 
+/**
+ * A floater used for selecting characters. It should appear after the user
+ * clicks on a photo.
+ *
+ * @param {Object} props - The props for the Floater component.
+ * @param {function} props.dismount - A function used for dismounting the
+ * Floater.
+ * @param {Object} props.location - An object containing the location of the
+ * user's click.
+ * @param {number} props.location.x - The x-coordinate of the user's click.
+ * @param {number} props.location.y - The y-coordinate of the user's click.
+ * @param {function} props.passGuess - A function for passing the user's guess
+ * to the parent component.
+ * @param {number[]} props.notFound - An array containing the ids of characters
+ * that have not been found yet.
+ */
 function Floater({
   dismount,
   location,
@@ -23,6 +39,11 @@ function Floater({
       }
     : { top: 0 };
 
+  /**
+   * A function for handling a character selection by the user.
+   *
+   * @param {string} name - The name of the character that the user guessed.
+   */
   const handleClick = (name: string) => {
     passGuess(name);
     dismount();
@@ -51,7 +72,9 @@ function Floater({
                     src={`/${name.toLowerCase()}.png`}
                   />
                   <div>
-                    <button name={name} onClick={() => handleClick(name)}>{name}</button>
+                    <button name={name} onClick={() => handleClick(name)}>
+                      {name}
+                    </button>
                   </div>
                 </li>
               );

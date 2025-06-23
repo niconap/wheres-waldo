@@ -2,6 +2,9 @@ import { Link } from 'react-router-dom';
 
 import './css/Nav.css';
 
+/**
+ * Navigation bar with links to the home page and leaderboards.
+ */
 function Nav() {
   return (
     <nav>

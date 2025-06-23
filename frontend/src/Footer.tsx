@@ -1,6 +1,10 @@
 import './css/Footer.css';
 import { useState, useEffect } from 'react';
 
+/**
+ * Footer component displaying project info, external links, and a theme toggle
+ * button.
+ */
 function Footer() {
   const [theme, setTheme] = useState<'light' | 'dark'>('light');
 
@@ -13,6 +17,9 @@ function Footer() {
     document.body.classList.toggle('dark-mode', initialTheme === 'dark');
   }, []);
 
+  /**
+   * Toggles between light and dark mode for the application.
+   */
   const toggleTheme = () => {
     const body = document.body;
     body.classList.toggle('dark-mode');
@@ -26,7 +33,7 @@ function Footer() {
         <p>
           <a
             className="external-link"
-            aria-label='Portfolio website'
+            aria-label="Portfolio website"
             href="https://niconap.dev"
             target="_blank"
           >
@@ -37,7 +44,7 @@ function Footer() {
         <p>
           <a
             className="external-link"
-            aria-label='GitHub repository'
+            aria-label="GitHub repository"
             href="https://www.github.com/niconap/wheres-waldo"
             target="_blank"
           >

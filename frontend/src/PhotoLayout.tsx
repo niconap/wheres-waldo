@@ -5,6 +5,9 @@ import { fetchPhotos } from './utils/photos';
 import { Photo } from './utils/types';
 import './css/PhotoLayout.css';
 
+/**
+ * Displays a grid of available photos with play buttons for each photo.
+ */
 function PhotoLayout() {
   const [photos, setPhotos] = useState<Photo[]>([]);
   const [error, setError] = useState<string | null>(null);
