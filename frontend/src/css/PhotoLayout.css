@@ -15,7 +15,6 @@
   box-shadow: 0 2px 4px var(--shadow-color);
   background-color: var(--background-color);
   padding: 1rem;
-  transition: background-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
 }
 
 .photo:hover {

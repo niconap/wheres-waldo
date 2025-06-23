@@ -166,6 +166,12 @@ h6 {
 }
 
 /* General styles */
+* {
+  transition: background-color 0.2s ease-in-out, border-color 0.2s ease-in-out,
+    border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out,
+    color 0.2s ease-in-out;
+}
+
 :root {
   --text-color: #333333;
   --background-color: #fcfcfc;
@@ -176,7 +182,7 @@ h6 {
   --button-color: #6ba4ff;
   --button-hover-color: #357ae8;
   --button-border-color: #4285f4;
-  --blur-color: #ffffffb3
+  --blur-color: #ffffffb3;
 }
 
 .dark-mode {
@@ -189,7 +195,7 @@ h6 {
   --button-color: #00adb5;
   --button-hover-color: #0097a7;
   --button-border-color: #006d73;
-  --blur-color: #000000b3
+  --blur-color: #000000b3;
 }
 
 .hide {
@@ -215,7 +221,7 @@ body {
 
 @supports not (filter: blur(10px)) {
   .blur::after {
-    content: "";
+    content: '';
     position: absolute;
     inset: 0;
     background: var(--blur-color);
@@ -248,17 +254,17 @@ main {
 }
 
 a h1 {
-  color: var(--text-color)
+  color: var(--text-color);
 }
 
 a {
   color: var(--button-color);
   text-decoration: none;
-  transition: color 0.2s ease-in-out;
   width: fit-content;
 }
 
-a:hover, a h1:hover {
+a:hover,
+a h1:hover {
   color: var(--button-color);
   text-decoration: underline;
 }
@@ -274,8 +280,6 @@ button {
   box-shadow: 0 3px 3px 0 var(--shadow-color);
   border-radius: 5px;
   cursor: pointer;
-  transition: background-color 0.2s ease-in-out, border-color 0.2s ease-in-out,
-    box-shadow 0.2s ease-in-out;
 }
 
 button:hover {
@@ -287,16 +291,16 @@ button:focus {
   box-shadow: 0 0 0 3px var(--focus-color);
 }
 
-input, select {
+input,
+select {
   background-color: var(--background-color);
   color: var(--text-color);
   border: 2px solid var(--border-color);
   border-radius: 5px;
-  transition: background-color 0.2s ease-in-out, border-color 0.2s ease-in-out,
-    box-shadow 0.2s ease-in-out;
 }
 
-input:hover, select:hover {
+input:hover,
+select:hover {
   outline: none;
   background-color: var(--background-light);
 }
@@ -305,7 +309,8 @@ select:hover {
   cursor: pointer;
 }
 
-input:focus, select:focus {
+input:focus,
+select:focus {
   outline: none;
   box-shadow: 0 0 0 3px var(--focus-color);
 }
